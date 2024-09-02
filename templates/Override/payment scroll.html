@@ -1,0 +1,9 @@
+{% extends 'Base/scroll.html' %}
+
+{% block scroll %}
+    {% for finance in payments %}
+        {% include 'include/payment block.html' with payment=finance %}
+    {% empty %}
+        {% include 'include/payment block.html' with payment=None %}
+    {% endfor %}
+{% endblock %}

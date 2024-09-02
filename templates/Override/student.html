@@ -1,0 +1,15 @@
+{% extends 'Base/header_content_block.html' %}
+{% load filters %}
+{% load db %}
+
+{% block header %}
+    <div class="name-block block">
+        <a>Ученик: {{ students.0.human|get_name }}</a>
+    </div>
+{% endblock %}
+
+{% block content %}
+    {% for student in students %}
+        {% include 'Override/course.html' with student=student custom_tag='student-course' %}
+    {% endfor %}
+{% endblock %}

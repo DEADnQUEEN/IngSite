@@ -1,0 +1,20 @@
+.payment {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-self: stretch;
+    justify-self: flex-end;
+    padding: 10px;
+    border-radius: 10px;
+    gap: 20px;
+    min-width: fit-content;
+    margin: 20px;
+}
+
+.plus {
+    color: var(--accept);
+}
+
+.minus {
+    color: var(--decline)
+}

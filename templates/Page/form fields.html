@@ -1,0 +1,55 @@
+{% extends 'Base/main index.html' %}
+{% load static %}
+{% load filters %}
+
+{% block head_loads %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/valid.css' %}"/>
+    <script type="text/javascript" src="{% static '/js/check_fields.js' %}" defer></script>
+    <script type="text/javascript" src="{% static '/js/test.js' %}" defer></script>
+{% endblock %}
+
+{% block extension %}
+    <form class="block" method="post">
+        {% csrf_token %}
+        <div class="form-fields">
+            {% for input in form|as_list %}
+                <div class="block form-field">
+                    <a class="text-font">{{ input.label }}</a>
+                    {{ input }}
+                {% if input.errors|length != 0 %}
+                    <div class="errors">
+                    {% for error in input.errors %}
+                        <a>{{ error }}</a>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                </div>
+            {% endfor %}
+            {% if form|is_register %}
+                <div class="policy">
+                    <div class="text-font">
+                        <a>Нажимая «Создать», вы принимаете</a>
+                        <a href="https://inginirium.pro/policy">Условия пользовательского соглашения</a>
+                    </div>
+                    <label class="form-sender-label">
+                        <button name="sender"
+                                class="button-style"
+                                id="form-sender"
+                                type="submit">
+                            Создать
+                        </button>
+                    </label>
+                </div>
+            {% else %}
+                <label class="form-sender-label">
+                    <button name="sender"
+                            class="button-style"
+                            id="form-sender"
+                            type="submit">
+                        Войти
+                    </button>
+                </label>
+            {% endif %}
+        </div>
+    </form>
+{% endblock %}

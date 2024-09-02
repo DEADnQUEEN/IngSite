@@ -1,0 +1,25 @@
+{% extends 'Base/main index.html' %}
+{% load static %}
+{% load i18n %}
+{% load filters %}
+
+{% block head_loads %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/header-content.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/visit.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/course.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/payment.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/scroll.css' %}"/>
+    <script type="text/javascript" src="{% static '/js/resize.js' %}" defer></script>
+    <script type="text/javascript" src="{% static '/js/scroll.js' %}" defer></script>
+{% endblock %}
+
+{% block extension %}
+<div class="students-blocks">
+{% for students in query.values %}
+    {% include "Override/student.html" with students=students custom_tag="student-course-blocks" %}
+{% empty %}
+    <a>Видимо здесь никого нет(</a>
+{% endfor %}
+</div>
+{% endblock %}

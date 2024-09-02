@@ -1,0 +1,17 @@
+{% extends "Base/main index.html" %}
+{% block extension %}
+    <div class="error">
+        <div class="error-title">
+            ERROR №{{ data.code }}
+        </div>
+
+        <div class="error-main">
+            Connection error description: {{ data.description }}
+        </div>
+    </div>
+{% endblock %}
+
+{% load static %}
+{% block head_loads %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/error.css' %}">
+{% endblock %}

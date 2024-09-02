@@ -1,0 +1,19 @@
+{% extends 'Base/header_content_block.html' %}
+{% load filters %}
+{% load db %}
+
+{% block header %}
+    <a class="course-header course-name block">Курс: </a>
+    <a class="course-header balance block">Баланс: {{ student.finance|count_finances }}₽</a>
+{% endblock %}
+
+{% block content %}
+    <div class="visit-blocks">
+        {% for visit in student.visits %}
+            {% include 'include/visit block.html' with visit=visit %}
+        {% endfor %}
+    </div>
+    <div class="payment-blocks">
+        {% include 'Override/payment scroll.html' with payments=student.finance %}
+    </div>
+{% endblock %}
