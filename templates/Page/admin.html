@@ -1,0 +1,27 @@
+{% extends 'Base/main index.html' %}
+{% load static %}
+{% load db %}
+
+{% block head_loads %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/header-content.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/scroll.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/admin.css' %}"/>
+{% endblock %}
+
+{% block extension %}
+    <div class="admin-content">
+        <div class="top-panel">
+            {% include 'include/admin panel.html' %}
+        </div>
+
+        {% if model is not None %}
+            <div class="model-filters">
+                {% include 'include/inputs-from-list.html' with objects=model|get_model_fields custom_tag="admin-filter" %}
+            </div>
+            {% include 'include/models view.html' with models=models %}
+        {% else %}
+            <a>Choose the model</a>
+        {% endif %}
+    </div>
+{% endblock %}
+

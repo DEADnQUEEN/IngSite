@@ -1,10 +1,10 @@
 from django.urls import path
-import inspect
 from . import views
-from django.shortcuts import redirect
 
 urlpatterns = [
-    path(i[0] + '/', i[1]) for i in inspect.getmembers(views, inspect.isfunction)
+    path("", views.main)
 ]
 
-urlpatterns.append(path("", lambda x: redirect('main/')))
+model_list = [*views.FILTER_OBJECTS.keys()]
+for i in range(len(model_list)):
+    urlpatterns.append(path(f"{model_list[i]}", views.filter_page))

@@ -1,5 +1,6 @@
 {% load filters %}
 {% load db %}
+
 <div class="visit-block {{ visit.states|get_tag:'name'|replace_sep:' ' }}"
      title="{{ visit.states|get_tag:'description'|capfirst|replace_sep:', ' }}">
     <a class="date">{{ visit.date|replace_to_dots:'-' }}</a>

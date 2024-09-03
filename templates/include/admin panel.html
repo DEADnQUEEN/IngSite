@@ -1,0 +1,6 @@
+{% load db %}
+
+{% for model in 0|get_model_list %}
+    <a class="button-style admin-button" href="/admin/{{ model }}">{{ model }}</a>
+{% endfor %}
+

@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <title>{{ title }}</title>
-    {% block head_loads %}{% endblock %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"/>
+    {% block head_loads %}{% endblock %}
 </head>
 <body>
 <div class="all">
@@ -20,6 +20,9 @@
             </div>
             <div class="header-buttons">
                 {% if user.is_authenticated %}
+                    {% if user.is_superuser %}
+                        <a class="button-style" href="/admin/">Admin panel</a>
+                    {% endif %}
                     <a class="initials button-style" href="/lk">{{ user.human|get_initials }}</a>
                     <a href="/logout" class="button-logout button-style">Выйти</a>
                 {% else %}

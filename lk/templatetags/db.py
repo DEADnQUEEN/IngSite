@@ -1,6 +1,7 @@
 from django import template
 from .. import models
 from .filters import SEP
+from admin.views import FILTER_OBJECTS
 
 register = template.Library()
 
@@ -10,6 +11,21 @@ def get_from_db(model_id: int, model):
     if item is None:
         raise ValueError
     return models.model_to_dict(item)
+
+
+@register.filter
+def column_values(model, column: str):
+    return [value[0] for value in model.values_list(column)]
+
+
+@register.filter
+def get_model_list(_):
+    return [key for key in FILTER_OBJECTS.keys()]
+
+
+@register.filter
+def get_model_fields(model):
+    return [key for key in models.model_to_dict(model).keys()]
 
 
 @register.filter

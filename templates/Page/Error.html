@@ -1,4 +1,10 @@
 {% extends "Base/main index.html" %}
+{% load static %}
+
+{% block head_loads %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/error.css' %}">
+{% endblock %}
+
 {% block extension %}
     <div class="error">
         <div class="error-title">
@@ -11,7 +17,3 @@
     </div>
 {% endblock %}
 
-{% load static %}
-{% block head_loads %}
-    <link rel="stylesheet" type="text/css" href="{% static '/css/error.css' %}">
-{% endblock %}

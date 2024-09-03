@@ -104,9 +104,5 @@ def lk(request: django.http.request.HttpRequest) -> django.http.response.HttpRes
 
 def logout(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
     django.contrib.auth.logout(request)
-    return django.shortcuts.redirect("/register")
-
-
-def test(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
-    return django.http.response.HttpResponse("")
+    return django.shortcuts.redirect("/login")
 
