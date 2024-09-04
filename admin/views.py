@@ -7,6 +7,8 @@ import inspect
 from lk import models
 from lk.base_models import Page
 import os
+from django.db.models import Field
+from django.db import connections
 
 
 FILTER_OBJECTS: Final = {
@@ -42,14 +44,24 @@ def filter_page(request: django.http.request.HttpRequest) -> django.http.respons
         "models": FILTER_OBJECTS[model_name].objects.all()
     }
 
+    fields: list[Field] = render_object['model']._meta.fields
+    render_object['fields'] = {
+        fields[i]: fields[i].db_type(connections['default'])
+        if fields[i].db_type(connections['default']) not in ["integer", 'float']
+        else "number"
+        for i in range(len(fields))
+    }
+
     if request.method == 'POST':
         data = {
-            field.name: request.POST[field.name]
-            if "id" not in field.name
-            else int(str(request.POST[field.name]))
-            for field in FILTER_OBJECTS[model_name]._meta.fields
-            if len(request.POST[field.name]) > 0
+            fields[i].name: fields[i].to_python(request.POST[fields[i].name])
+            for i in range(len(fields))
+            if len(request.POST[fields[i].name]) > 0
         }
+
+        if len(data.keys()) == 0:
+            FILTER_OBJECTS[model_name].objects.all()
+
         render_object['models'] = FILTER_OBJECTS[model_name].objects.filter(**data)
 
     return django.shortcuts.render(
