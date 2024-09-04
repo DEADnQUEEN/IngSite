@@ -14,7 +14,7 @@ def model_to_dict(model: models.Model):
 class Connect(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
     user = models.ForeignKey('User', models.DO_NOTHING, db_column='User_ID')
-    student = models.ForeignKey('Student', models.DO_NOTHING, db_column='Student_ID')
+    student_id = models.ForeignKey('Student', models.DO_NOTHING, db_column='Student_ID')
 
     class Meta:
         managed = False
@@ -43,27 +43,6 @@ class Human(models.Model):
         db_table = 'Human'
 
 
-class Page(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True, blank=True, null=False)
-    title = models.TextField(db_column='Title')
-    route = models.TextField(db_column='Route', unique=True)
-    template = models.TextField(db_column='Template')
-
-    class Meta:
-        managed = False
-        db_table = 'Page'
-
-
-class Phrase(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)
-    phrase = models.TextField(db_column='Phrase')
-    tag = models.TextField(db_column='Tag')
-
-    class Meta:
-        managed = False
-        db_table = 'Phrase'
-
-
 class States(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
     name = models.TextField(db_column='Name')
@@ -76,7 +55,7 @@ class States(models.Model):
 
 class Student(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
-    human = models.ForeignKey(Human, models.DO_NOTHING, db_column='HID')
+    human_id = models.ForeignKey(Human, models.DO_NOTHING, db_column='HID')
     course = models.ForeignKey(Courses, models.DO_NOTHING, db_column='Course_ID')
     state = models.ForeignKey(States, models.DO_NOTHING, db_column='State_ID')
 
@@ -127,17 +106,17 @@ class UserManager(django.contrib.auth.models.BaseUserManager):
         )
 
         if len(names) == 0:
-            human = Human(
+            human_id = Human(
                 name=name,
                 surname=surname,
                 father_name=father_name
             )
-            human.save()
+            human_id.save()
         else:
-            human = names[0]
+            human_id = names[0]
 
         mail = self.normalize_email(mail)
-        user = self.model(phone=phone, mail=mail, login=login, human_id=human.id, **extra_fields)
+        user = self.model(phone=phone, mail=mail, login=login, human_id=human_id.id, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
 
@@ -156,7 +135,7 @@ class UserManager(django.contrib.auth.models.BaseUserManager):
 
 class User(django.contrib.auth.models.AbstractBaseUser, django.contrib.auth.models.PermissionsMixin):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    human = models.ForeignKey(Human, models.DO_NOTHING, db_column='Human_ID')  # Field name made lowercase.
+    human_id = models.ForeignKey(Human, models.DO_NOTHING, db_column='Human_ID')  # Field name made lowercase.
     login = models.TextField(db_column='Login', unique=True)  # Field name made lowercase.
     password = models.TextField(db_column='Password')
     phone = models.TextField(db_column='Phone', unique=True)  # Field name made lowercase.

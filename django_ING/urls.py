@@ -6,5 +6,5 @@ from . import settings
 urlpatterns = [
     path('', include('lk.urls')),
     path('admin/', include('admin.urls')),
-    re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
+#    re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
 ]

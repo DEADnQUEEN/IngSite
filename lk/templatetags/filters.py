@@ -1,8 +1,8 @@
 import decimal
 from django import template
 from typing import Final
-from func_tools import get_phrase
 from .. import models
+from ..base_models import Phrase
 from .. import forms
 
 register = template.Library()
@@ -11,7 +11,7 @@ SEP: Final = "_sep_"
 
 @register.filter
 def phrase(value):
-    return get_phrase(value)
+    return Phrase.objects.filter(tag=value).first()
 
 
 @register.filter

@@ -13,12 +13,24 @@
         <div class="top-panel">
             {% include 'include/admin panel.html' %}
         </div>
-
         {% if model is not None %}
-            <div class="model-filters">
-                {% include 'include/inputs-from-list.html' with objects=model|get_model_fields custom_tag="admin-filter" %}
-            </div>
-            {% include 'include/models view.html' with models=models %}
+            <form method="post" class="model-filters">
+                {% csrf_token %}
+                {% for column in model|get_model_fields %}
+                    <div class="column-{{ column }} column">
+                        <label class="column-header">
+                            <input name="{{ column }}" class="admin-filter label-input" placeholder="{{ column }}">
+                            <a class="text-font">{{ column }}</a>
+                        </label>
+                        {% for value in models|column_values:column %}
+                            <a>{{ value }}</a>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                <label class="filter-submit-label">
+                    <button class="button-style filter-submit" type="submit">Search</button>
+                </label>
+            </form>
         {% else %}
             <a>Choose the model</a>
         {% endif %}

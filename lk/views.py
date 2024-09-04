@@ -1,21 +1,21 @@
 from __future__ import annotations
-
-import inspect
-
 import django.http.request
 import django.http.response
 import django.shortcuts
-import func_tools
 from .forms import UserLogin, UserRegister
 import django.contrib.auth
 import django.db.models.fields.related
-from .models import User, Connect, model_to_dict
-from . import models
+from .models import User, Connect
+from .base_models import Page
 import hashlib
 
 
 def login(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
-    page = func_tools.get_page(request.path_info)
+    page = Page.objects.filter(route=request.path).first()
+
+    if page is None:
+        raise Exception()
+
     if request.method == 'GET':
         form = UserLogin()
         return django.shortcuts.render(
@@ -51,7 +51,11 @@ def login(request: django.http.request.HttpRequest) -> django.http.response.Http
 
 
 def register(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
-    page = func_tools.get_page(request.path_info)
+    page = Page.objects.filter(route=request.path).first()
+
+    if page is None:
+        raise Exception()
+
     if request.method == 'GET':
         form = UserRegister()
         return django.shortcuts.render(
@@ -64,8 +68,6 @@ def register(request: django.http.request.HttpRequest) -> django.http.response.H
         )
 
     form = UserRegister(request.POST)
-
-    page = func_tools.get_page(request.path_info)
 
     if not form.is_valid():
         return django.shortcuts.render(
@@ -88,16 +90,20 @@ def lk(request: django.http.request.HttpRequest) -> django.http.response.HttpRes
     if not request.user.is_authenticated:
         return django.shortcuts.redirect("/register")
 
-    page = func_tools.get_page(request.path_info)
+    page = Page.objects.filter(route=request.path).first()
+
+    if page is None:
+        raise Exception()
+
     connects = Connect.objects.filter(user_id=request.user.id)
 
     query = {}
 
     for i in range(len(connects)):
-        if connects[i].student.human.id not in list(query.keys()):
-            query[connects[i].student.human.id] = []
+        if connects[i].student_id.human_id.id not in list(query.keys()):
+            query[connects[i].student_id.human_id.id] = []
 
-        query[connects[i].student.human.id].append(connects[i].student)
+        query[connects[i].student_id.human_id.id].append(connects[i].student_id)
 
     return django.shortcuts.render(request, page.template, {"title": page.title, "query": query})
 
@@ -105,4 +111,3 @@ def lk(request: django.http.request.HttpRequest) -> django.http.response.HttpRes
 def logout(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
     django.contrib.auth.logout(request)
     return django.shortcuts.redirect("/login")
-

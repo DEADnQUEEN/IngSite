@@ -3,9 +3,9 @@ from typing import Final
 from django.shortcuts import render
 import django.http.request
 import django.http.response
-import func_tools
 import inspect
 from lk import models
+from lk.base_models import Page
 import os
 
 
@@ -20,7 +20,10 @@ def main(request: django.http.request.HttpRequest) -> django.http.response.HttpR
     if not request.user.is_superuser:
         return django.shortcuts.redirect('/lk')
 
-    page = func_tools.get_page(request.path_info)
+    page = Page.objects.filter(route=request.path).first()
+
+    if page is None:
+        raise Exception()
 
     return django.shortcuts.render(
         request,
@@ -40,7 +43,14 @@ def filter_page(request: django.http.request.HttpRequest) -> django.http.respons
     }
 
     if request.method == 'POST':
-        print('')
+        data = {
+            field.name: request.POST[field.name]
+            if "id" not in field.name
+            else int(str(request.POST[field.name]))
+            for field in FILTER_OBJECTS[model_name]._meta.fields
+            if len(request.POST[field.name]) > 0
+        }
+        render_object['models'] = FILTER_OBJECTS[model_name].objects.filter(**data)
 
     return django.shortcuts.render(
         request,

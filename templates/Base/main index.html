@@ -23,7 +23,7 @@
                     {% if user.is_superuser %}
                         <a class="button-style" href="/admin/">Admin panel</a>
                     {% endif %}
-                    <a class="initials button-style" href="/lk">{{ user.human|get_initials }}</a>
+                    <a class="initials button-style" href="/lk">{{ user.human_id|get_initials }}</a>
                     <a href="/logout" class="button-logout button-style">Выйти</a>
                 {% else %}
                     <a href="/register" class="button-register button-style">Регистрация</a>
