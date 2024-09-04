@@ -118,11 +118,3 @@ def lk(request: django.http.request.HttpRequest) -> django.http.response.HttpRes
 def logout(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
     django.contrib.auth.logout(request)
     return django.shortcuts.redirect("/login")
-
-
-def test(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
-    fields: list[django.db.models.Field] = [i for i in User._meta.fields]
-    from django.db import connections
-    for i in range(len(fields)):
-        print(fields[i].db_type(connections['default']))
-    return django.http.response.HttpResponse("")
