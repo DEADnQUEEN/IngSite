@@ -79,7 +79,8 @@
     border-width: 0;
 }
 
-.model-table {
-
+.model-table td,
+.model-table th {
+    padding: 5px;
 }
 

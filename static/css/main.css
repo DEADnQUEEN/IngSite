@@ -5,6 +5,7 @@
     src: local('Agora Slab'),
        url('../fonts/font-regular.ttf') format("truetype");
 }
+
 @font-face {
     font-family: 'Agora Slab';
     font-style: normal;
@@ -172,10 +173,9 @@ a, h1, h2, h3, h4, h5, h6{
     height: fit-content;
 }
 .footer-block > div > svg {
-    width: fit-content;
-    height: fit-content;
+    width: 40px;
+    height: 40px;
 }
-
 
 .footer-content a {
     font-size: 18px;
@@ -210,4 +210,10 @@ a, h1, h2, h3, h4, h5, h6{
     background-color: var(--primary-color);
     color: var(--background-color);
     outline: none;
+}
+
+.click-icon > svg > a {
+    margin: 50px;
+    border-radius: 5px;
+    align-self: center;
 }
