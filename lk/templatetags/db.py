@@ -1,3 +1,4 @@
+import django.db.models
 from django import template
 from .. import models
 from .filters import SEP
@@ -14,8 +15,8 @@ def get_from_db(model_id: int, model):
 
 
 @register.filter
-def column_values(model, column: str):
-    return [value[0] for value in model.values_list(column)]
+def column_value(model: django.db.models.Model, column: django.db.models.Field):
+    return column.value_from_object(model)
 
 
 @register.filter

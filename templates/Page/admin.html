@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{% static '/css/header-content.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static '/css/scroll.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static '/css/admin.css' %}"/>
+    <script type="text/javascript" src="{% static '/js/test.js' %}" defer></script>
 {% endblock %}
 
 {% block extension %}
@@ -14,23 +15,49 @@
             {% include 'include/admin panel.html' %}
         </div>
         {% if model is not None %}
-            <form method="post" class="model-filters">
-                {% csrf_token %}
-                {% for column, input in fields.items %}
-                    <div class="column-{{ column.name }} column">
-                        <label class="column-header">
-                            <input name="{{ column.name }}" class="admin-filter label-input" type="{{ input }}" placeholder="{{ column.name }}">
-                            <a class="text-font">{{ column.name }}</a>
-                        </label>
-                        {% for value in models|column_values:column.name %}
-                            <a>{{ value }}</a>
+            <table class="model-table">
+                <thead class="table-head">
+                    <tr>
+                        {% for column, input in fields.items %}
+                            <th scope="col">
+                                <label>
+                                    <input class="input-column" placeholder="{{ column.name }}" name="{{ column.name }}" type="{{ input }}">
+                                </label>
+                            </th>
                         {% endfor %}
-                    </div>
+                        <th>
+                            <button>filter</button>
+                        </th>
+                        <th>
+                            <button>save</button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for model in models %}
+                    <tr>
+                        {% for column, input in fields.items %}
+                            {% if forloop.first %}
+                                <th scope="row">
+                                    <label>
+                                        <input value="{{ model|column_value:column }}" class="input-column" placeholder="{{ column.name }}" name="model-{{ forloop.counter0 }}-{{ column.name }}" type="{{ input }}" minlength="1">
+                                    </label>
+                                </th>
+                            {% else %}
+                                <td>
+                                    <label>
+                                        <input value="{{ model|column_value:column }}" class="input-column" placeholder="{{ column.name }}" name="model-{{ forloop.counter0 }}-{{ column.name }}" type="{{ input }}" minlength="1">
+                                    </label>
+                                </td>
+                            {% endif %}
+                        {% endfor %}
+                        <td colspan="2">
+                            <button>save</button>
+                        </td>
+                    </tr>
                 {% endfor %}
-                <label class="filter-submit-label">
-                    <button class="button-style filter-submit" type="submit">Search</button>
-                </label>
-            </form>
+                </tbody>
+            </table>
         {% else %}
             <a>Choose the model</a>
         {% endif %}
