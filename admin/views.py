@@ -1,4 +1,5 @@
 from __future__ import annotations
+import json
 from typing import Final
 from django.shortcuts import render
 import django.http.request
@@ -11,7 +12,7 @@ from django.db.models import Field
 from django.db import connections
 
 
-FILTER_OBJECTS: Final = {
+FILTER_OBJECTS: Final[dict[str: django.db.models.Model]] = {
     member[0]: member[1]
     for member in inspect.getmembers(models, inspect.isclass)
     if models.models.Model in member[1].__bases__
@@ -36,6 +37,22 @@ def main(request: django.http.request.HttpRequest) -> django.http.response.HttpR
     )
 
 
+def save(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
+    if request.method != "POST" or not request.user.is_superuser:
+        return django.shortcuts.redirect('../lk/')
+    json_data: dict = json.loads(request.body)
+
+    model_object: models.models.Model = FILTER_OBJECTS[json_data['table']].objects.filter(id=json_data['id'])[0]
+
+    keys = list(json_data.keys())
+    for i in range(2, len(keys)):
+        setattr(model_object, keys[i], json_data[keys[i]])
+
+    model_object.save()
+
+    return django.http.response.HttpResponse("")
+
+
 def filter_page(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
     model_name = os.path.split(request.path)[-1]
     render_object = {
@@ -52,17 +69,19 @@ def filter_page(request: django.http.request.HttpRequest) -> django.http.respons
         for i in range(len(fields))
     }
 
-    if request.method == 'POST':
-        data = {
-            fields[i].name: fields[i].to_python(request.POST[fields[i].name])
-            for i in range(len(fields))
-            if len(request.POST[fields[i].name]) > 0
-        }
-
-        if len(data.keys()) == 0:
-            FILTER_OBJECTS[model_name].objects.all()
-
-        render_object['models'] = FILTER_OBJECTS[model_name].objects.filter(**data)
+    """
+        if request.method == 'POST':
+            data = {
+                fields[i].name: fields[i].to_python(request.POST[fields[i].name])
+                for i in range(len(fields))
+                if len(request.POST[fields[i].name]) > 0
+            }
+    
+            if len(data.keys()) == 0:
+                FILTER_OBJECTS[model_name].objects.all()
+    
+            render_object['models'] = FILTER_OBJECTS[model_name].objects.filter(**data)
+    """
 
     return django.shortcuts.render(
         request,

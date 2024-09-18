@@ -2,7 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.main)
+    path("", views.main),
+    path("save", views.save)
 ]
 
 model_list = [*views.FILTER_OBJECTS.keys()]

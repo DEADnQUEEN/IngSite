@@ -15,44 +15,61 @@
             {% include 'include/admin panel.html' %}
         </div>
         {% if model is not None %}
-            <table class="model-table">
+            {% csrf_token %}
+            <table class="model-table" id="main-table">
                 <thead class="table-head">
                     <tr>
                         {% for column, input in fields.items %}
                             <th scope="col">
-                                    <label>
-                                    <input class="input-column" placeholder="{{ column.name }}" name="{{ column.name }}" type="{{ input }}">
-                                </label>
+                                <a>{{ column.name }}</a>
                             </th>
                         {% endfor %}
-                        <th>
-                            <button>filter</button>
-                        </th>
-                        <th>
-                            <button>save</button>
+                        <th colspan="2">
+                            <button onclick="save_table()" class="save-button">save table</button>
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="main-table-body">
+                <tr>
+                    {% for column, input in fields.items %}
+                        {% if forloop.first %}
+                            <th scope="row">
+                                <label>
+                                    <input class="input-column" placeholder="{{ column.name }}" name="{{ column.name }}" type="{{ input }}">
+                                </label>
+                            </th>
+                        {% else %}
+                            <td>
+                                <label>
+                                    <input class="input-column" placeholder="{{ column.name }}" name="{{ column.name }}" type="{{ input }}">
+                                </label>
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                    <th style="padding-right: 5px">
+                        <button class="save-button" onclick="console.log('a')">filter</button>
+                    </th>
+                    <th style="padding-left: 5px">
+                        <button class="save-button" onclick="console.log('a')">add</button>
+                    </th>
+                </tr>
                 {% for model in models %}
                     <tr>
                         {% for column, input in fields.items %}
                             {% if forloop.first %}
                                 <th scope="row">
-                                    <label>
-                                        <input value="{{ model|column_value:column }}" class="input-column" placeholder="{{ column.name }}" name="model-{{ forloop.counter0 }}-{{ column.name }}" type="{{ input }}" minlength="1">
-                                    </label>
+                                    <a class="input-column" id="model-{{ forloop.parentloop.counter }}-{{ column.name }}">{{ model|column_value:column }}</a>
                                 </th>
                             {% else %}
                                 <td>
                                     <label>
-                                        <input value="{{ model|column_value:column }}" class="input-column" placeholder="{{ column.name }}" name="model-{{ forloop.counter0 }}-{{ column.name }}" type="{{ input }}" minlength="1">
+                                        <input id="model-{{ forloop.parentloop.counter }}-{{ column.name }}" value="{{ model|column_value:column }}" class="input-column" placeholder="{{ column.name }}" oninput="update(this)" name="model-{{ forloop.counter }}-{{ column.name }}" type="{{ input }}" minlength="1">
                                     </label>
                                 </td>
                             {% endif %}
                         {% endfor %}
                         <td colspan="2">
-                            <button>save</button>
+                            <button class="save-line" onclick="send_row_request({{ forloop.counter }})">save</button>
                         </td>
                     </tr>
                 {% endfor %}
