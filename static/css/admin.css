@@ -103,14 +103,26 @@
     font-weight: bold;
 }
 
-.model-table button:hover{
+.model-table .save-button:hover{
     background-color: var(--primary-color);
     color: var(--warning)
 }
 
-.model-table button:active{
+.save-line {
+    pointer-events: none;
+}
+
+.model-table .save-button:active{
     background-color: var(--accept);
 }
+
+.model-table .save-button{
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    cursor: pointer;
+    pointer-events: all;
+}
+
 
 .model-table input{
     border: 2px solid var(--gray);
@@ -131,9 +143,4 @@
 .model-table .changed:invalid,
 .model-table .changed:active:invalid {
     border-color: var(--decline);
-}
-
-.model-table .save-button{
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
 }

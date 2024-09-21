@@ -23,7 +23,7 @@ function send_row_request(row_sender) {
         }
     }
 
-    row_sender.classList.remove('save-button');
+    document.getElementById('row-sender-' + row_sender).classList.remove('save-button');
 
     xhr.open("POST", '/admin/save')
 

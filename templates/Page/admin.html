@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{% static '/css/header-content.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static '/css/scroll.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static '/css/admin.css' %}"/>
+    <script type="text/javascript" src="{% static '/js/saving.js' %}" defer></script>
     <script type="text/javascript" src="{% static '/js/test.js' %}" defer></script>
 {% endblock %}
 
@@ -35,13 +36,13 @@
                         {% if forloop.first %}
                             <th scope="row">
                                 <label>
-                                    <input class="input-column" placeholder="{{ column.name }}" name="{{ column.name }}" type="{{ input }}">
+                                    <input oninput="table_filter(this)" class="input-column" placeholder="{{ column.name }}" name="{{ column.name }}" type="{{ input }}">
                                 </label>
                             </th>
                         {% else %}
                             <td>
                                 <label>
-                                    <input class="input-column" placeholder="{{ column.name }}" name="{{ column.name }}" type="{{ input }}">
+                                    <input oninput="table_filter(this)" class="input-column" placeholder="{{ column.name }}" name="{{ column.name }}" type="{{ input }}">
                                 </label>
                             </td>
                         {% endif %}
@@ -57,11 +58,11 @@
                     <tr>
                         {% for column, input in fields.items %}
                             {% if forloop.first %}
-                                <th scope="row">
+                                <th scope="row" class="column-{{ column.name }}">
                                     <a class="input-column" id="model-{{ forloop.parentloop.counter }}-{{ column.name }}">{{ model|column_value:column }}</a>
                                 </th>
                             {% else %}
-                                <td>
+                                <td class="column-{{ column.name }}">
                                     <label>
                                         <input id="model-{{ forloop.parentloop.counter }}-{{ column.name }}" value="{{ model|column_value:column }}" class="input-column" placeholder="{{ column.name }}" oninput="update(this)" name="model-{{ forloop.counter }}-{{ column.name }}" type="{{ input }}" minlength="1">
                                     </label>
@@ -69,7 +70,7 @@
                             {% endif %}
                         {% endfor %}
                         <td colspan="2">
-                            <button class="save-line" onclick="send_row_request({{ forloop.counter }})">save</button>
+                            <button class="save-line" id="row-sender-{{ forloop.counter }}" onclick="send_row_request({{ forloop.counter }})">save</button>
                         </td>
                     </tr>
                 {% endfor %}
