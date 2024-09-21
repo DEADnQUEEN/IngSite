@@ -31,12 +31,12 @@
                     </tr>
                 </thead>
                 <tbody id="main-table-body">
-                <tr>
+                <tr class="top-row">
                     {% for column, input in fields.items %}
                         {% if forloop.first %}
                             <th scope="row">
                                 <label>
-                                    <input oninput="table_filter(this)" class="input-column" placeholder="{{ column.name }}" name="{{ column.name }}" type="{{ input }}">
+                                    <input oninput="table_filter_id(this)" class="input-column" placeholder="{{ column.name }}" name="{{ column.name }}" type="{{ input }}">
                                 </label>
                             </th>
                         {% else %}
@@ -47,15 +47,12 @@
                             </td>
                         {% endif %}
                     {% endfor %}
-                    <th style="padding-right: 5px">
-                        <button class="save-button" onclick="console.log('a')">filter</button>
-                    </th>
-                    <th style="padding-left: 5px">
+                    <th>
                         <button class="save-button" onclick="console.log('a')">add</button>
                     </th>
                 </tr>
                 {% for model in models %}
-                    <tr>
+                    <tr class="content-row">
                         {% for column, input in fields.items %}
                             {% if forloop.first %}
                                 <th scope="row" class="column-{{ column.name }}">

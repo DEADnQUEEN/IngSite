@@ -2,12 +2,11 @@ function send_row_request(row_sender) {
     let xhr = new XMLHttpRequest();
 
     let table_body = document.getElementById('main-table-body');
-    let path = window.location.href.split('/');
 
     let inputs = table_body.children[row_sender].getElementsByTagName('input');
 
     let data = {
-        'table': path[path.length - 1],
+        'table': document.title,
         'id': Number(table_body.children[row_sender].getElementsByTagName('a')[0].textContent)
     }
 

@@ -144,3 +144,15 @@
 .model-table .changed:active:invalid {
     border-color: var(--decline);
 }
+
+.content-row{
+    visibility: visible;
+}
+
+.content-row-filtered {
+    visibility: collapse;
+}
+
+#main-table-body {
+    transition: ease-in-out var(--transition);
+}
