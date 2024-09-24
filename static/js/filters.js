@@ -1,8 +1,7 @@
 const bind = document.querySelectorAll('.filter-column')
 const last_content = []
 
-function checker(index, rec) {
-    console.log(rec, index)
+function checker(index) {
     let found = 'content-row';
     if (last_content[index].length > bind[index].value.length){
         found += '-hidden'
@@ -19,18 +18,14 @@ function checker(index, rec) {
 
     if (last_content[index].length > bind[index].value.length){
         let inputs = document.querySelectorAll('.filter-column');
-        console.log(inputs)
         for (let j = 0; j < index; j++){
             if (inputs[j].value.length !== 0){
-                    checker(j, true);
-                    console.log(j)
+                checker(j);
             }
         }
-        console.log('half');
         for (let j = index + 1; j < inputs.length; j++){
             if (inputs[j].value.length !== 0){
-                checker(j, true);
-                console.log(j)
+                checker(j);
             }
         }
     }
@@ -44,7 +39,7 @@ for (let i = 0; i < bind.length; i++){
     bind[i].addEventListener(
         'input',
         () => {
-            checker(i, false);
+            checker(i);
         }
     )
 }
