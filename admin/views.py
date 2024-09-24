@@ -18,7 +18,6 @@ FILTER_OBJECTS: Final[dict[str: django.db.models.Model]] = {
     if models.models.Model in member[1].__bases__
 }
 
-
 def main(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
     if not request.user.is_superuser:
         return django.shortcuts.redirect('/lk')
@@ -68,20 +67,6 @@ def filter_page(request: django.http.request.HttpRequest) -> django.http.respons
         else "number"
         for i in range(len(fields))
     }
-
-    """
-        if request.method == 'POST':
-            data = {
-                fields[i].name: fields[i].to_python(request.POST[fields[i].name])
-                for i in range(len(fields))
-                if len(request.POST[fields[i].name]) > 0
-            }
-    
-            if len(data.keys()) == 0:
-                FILTER_OBJECTS[model_name].objects.all()
-    
-            render_object['models'] = FILTER_OBJECTS[model_name].objects.filter(**data)
-    """
 
     return django.shortcuts.render(
         request,

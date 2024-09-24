@@ -145,11 +145,11 @@
     border-color: var(--decline);
 }
 
-.content-row-filtered {
+.content-row {
     visibility: visible;
 }
 
-.content-row {
+.content-row-hidden {
     visibility: collapse;
 }
 
