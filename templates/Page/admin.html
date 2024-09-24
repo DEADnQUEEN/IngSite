@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{% static '/css/scroll.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static '/css/admin.css' %}"/>
     <script type="text/javascript" src="{% static '/js/saving.js' %}" defer></script>
+    <script type="text/javascript" src="{% static '/js/filters.js' %}" defer></script>
     <script type="text/javascript" src="{% static '/js/test.js' %}" defer></script>
 {% endblock %}
 
@@ -33,38 +34,34 @@
                 <tbody id="main-table-body">
                 <tr class="top-row">
                     {% for column, input in fields.items %}
-                        {% if forloop.first %}
-                            <th scope="row">
-                                <label>
-                                    <input oninput="table_filter_id(this)" class="input-column" placeholder="{{ column.name }}" name="{{ column.name }}" type="{{ input }}">
-                                </label>
-                            </th>
-                        {% else %}
-                            <td>
-                                <label>
-                                    <input oninput="table_filter(this)" class="input-column" placeholder="{{ column.name }}" name="{{ column.name }}" type="{{ input }}">
-                                </label>
-                            </td>
-                        {% endif %}
+                        <th>
+                            <label>
+                                <input class="input-column filter-column" minlength="1" placeholder="{{ column.name }}" id="{{ column.name }}" name="{{ column.name }}" type="{{ input }}">
+                            </label>
+                        </th>
                     {% endfor %}
                     <th>
                         <button class="save-button" onclick="console.log('a')">add</button>
                     </th>
                 </tr>
                 {% for model in models %}
-                    <tr class="content-row">
+                    <tr class="content-row-filtered">
                         {% for column, input in fields.items %}
-                            {% if forloop.first %}
-                                <th scope="row" class="column-{{ column.name }}">
-                                    <a class="input-column" id="model-{{ forloop.parentloop.counter }}-{{ column.name }}">{{ model|column_value:column }}</a>
-                                </th>
-                            {% else %}
-                                <td class="column-{{ column.name }}">
-                                    <label>
-                                        <input id="model-{{ forloop.parentloop.counter }}-{{ column.name }}" value="{{ model|column_value:column }}" class="input-column" placeholder="{{ column.name }}" oninput="update(this)" name="model-{{ forloop.counter }}-{{ column.name }}" type="{{ input }}" minlength="1">
-                                    </label>
-                                </td>
-                            {% endif %}
+                            <th class="column-{{ column.name }}">
+                                <label>
+                                    <input id="model-{{ forloop.parentloop.counter }}-{{ column.name }}"
+                                           value="{{ model|column_value:column }}"
+                                           class="input-column"
+                                           placeholder="{{ column.name }}"
+                                           oninput="update(this)"
+                                           name="model-{{ column.name }}"
+                                           type="{{ input }}"
+                                           minlength="1"
+                                           {% if forloop.first %}
+                                               readonly
+                                           {% endif %}>
+                                </label>
+                            </th>
                         {% endfor %}
                         <td colspan="2">
                             <button class="save-line" id="row-sender-{{ forloop.counter }}" onclick="send_row_request({{ forloop.counter }})">save</button>

@@ -145,14 +145,20 @@
     border-color: var(--decline);
 }
 
-.content-row{
+.content-row-filtered {
     visibility: visible;
 }
 
-.content-row-filtered {
+.content-row {
     visibility: collapse;
 }
 
 #main-table-body {
     transition: ease-in-out var(--transition);
+}
+
+.filter-column:not(:placeholder-shown),
+.filter-column:not(:placeholder-shown):focus,
+.filter-column:not(:placeholder-shown):active{
+    border-color: var(--accept);
 }
