@@ -54,9 +54,9 @@ def save(request: django.http.request.HttpRequest) -> django.http.response.HttpR
 
     model_object: models.models.Model = FILTER_OBJECTS[json_data['table']].objects.filter(id=json_data['id'])[0]
 
-    keys = list(json_data.keys())
+    keys = list(json_data['model-content'].keys())
     for i in range(2, len(keys)):
-        setattr(model_object, keys[i], json_data[keys[i]])
+        setattr(model_object, keys[i], json_data['model-content'][keys[i]])
 
     model_object.save()
 

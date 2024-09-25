@@ -7,16 +7,18 @@ function send_row_request(row_sender) {
 
     let data = {
         'table': document.title,
-        'id': Number(table_body.children[row_sender].getElementsByTagName('a')[0].textContent)
+        'model-content': {
+            'id': Number(table_body.children[row_sender].getElementsByTagName('a')[0].textContent)
+        }
     }
 
     for (let i = 0; i < inputs.length; i++) {
         if (inputs[i].classList.contains('changed')) {
             if (inputs[i].type === 'number'){
-                data[inputs[i].placeholder] = Number(inputs[i].value)
+                data['model-content'][inputs[i].placeholder] = Number(inputs[i].value)
             }
             else {
-                data[inputs[i].placeholder] = inputs[i].value
+                data['model-content'][inputs[i].placeholder] = inputs[i].value
             }
             inputs[i].classList.remove('changed')
         }
