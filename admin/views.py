@@ -18,6 +18,7 @@ FILTER_OBJECTS: Final[dict[str: django.db.models.Model]] = {
     if models.models.Model in member[1].__bases__
 }
 
+
 def main(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
     if not request.user.is_superuser:
         return django.shortcuts.redirect('/lk')
@@ -34,6 +35,16 @@ def main(request: django.http.request.HttpRequest) -> django.http.response.HttpR
             "title": page.title,
         }
     )
+
+
+def add(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
+    if request.method != "POST" or not request.user.is_superuser:
+        return django.shortcuts.redirect('../lk/')
+
+    json_data: dict = json.loads(request.body)
+    FILTER_OBJECTS[json_data['table']].objects.create(**json_data['model-content'])
+
+    return django.http.response.HttpResponse("")
 
 
 def save(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:

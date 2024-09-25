@@ -3,7 +3,8 @@ from . import views
 
 urlpatterns = [
     path("", views.main),
-    path("save", views.save)
+    path("save", views.save),
+    path("add", views.add)
 ]
 
 model_list = [*views.FILTER_OBJECTS.keys()]
