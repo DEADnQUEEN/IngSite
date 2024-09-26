@@ -1,164 +1,166 @@
-.admin-content {
-    justify-content: flex-start;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--background-color-block);
-    border-radius: 40px;
-    padding: 20px;
-    height: fit-content;
-    width: fit-content;
-    box-shadow: var(--inside-shadow);
-    gap: 20px;
-}
+@media (min-width: 768px) {
+    .admin-content {
+        justify-content: flex-start;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--background-color-block);
+        border-radius: 40px;
+        padding: 20px;
+        height: fit-content;
+        width: fit-content;
+        box-shadow: var(--inside-shadow);
+        gap: 20px;
+    }
 
-.admin-button {
-    font-size: 14px;
-}
+    .admin-button {
+        font-size: 14px;
+    }
 
-.top-panel {
-    width: fit-content;
-    height: fit-content;
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    flex-wrap: wrap;
-}
+    .top-panel {
+        width: fit-content;
+        height: fit-content;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
 
-.label-input {
-    padding: 10px;
-    border-radius: 10px;
-    border: 2px solid var(--primary-color);
-    background-color: transparent;
-    outline: none;
-}
+    .label-input {
+        padding: 10px;
+        border-radius: 10px;
+        border: 2px solid var(--primary-color);
+        background-color: transparent;
+        outline: none;
+    }
 
-.label-input:not(:placeholder-shown),
-.label-input:focus {
-    border-color: var(--accept);
-}
-
-
-.models-list {
-    display: inline-flex;
-    flex-direction: column;
-}
-
-.filter-submit {
-    height: fit-content;
-    font-size: 14px;
-}
-
-.model-filters {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-}
-
-.column {
-    display: flex;
-    flex-direction: column;
-}
-
-.column > a {
-    width: fit-content;
-}
-
-.column > label {
-    width: 100%;
-    display: flex;
-}
-
-.input-column {
-    min-width: 100px;
-    width: 100%;
-}
-
-.model-table td,
-.model-table th {
-    padding: 10px;
-    text-align: center;
-}
-
-.model-table > tbody > tr > th{
-    text-align: right;
-}
-
-.table-head > tr > th:first-child{
-    width: 40px;
-}
-
-.table-head > tr > th {
-    text-align: right;
-}
-
-.model-table button{
-    width: 100%;
-    height: 100%;
-    border-radius: 5px;
-    border: 2px solid var(--gray);
-    color: var(--gray);
-    transition: ease-in calc(var(--transition) / 2);
-    font-size: 16px;
-    font-family: "Agora Slab", serif;
-    font-weight: bold;
-}
-
-.model-table .save-button:hover{
-    background-color: var(--primary-color);
-    color: var(--warning)
-}
-
-.save-line {
-    pointer-events: none;
-}
-
-.model-table .save-button:active{
-    background-color: var(--accept);
-}
-
-.model-table .save-button{
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
-    cursor: pointer;
-    pointer-events: all;
-}
+    .label-input:not(:placeholder-shown),
+    .label-input:focus {
+        border-color: var(--accept);
+    }
 
 
-.model-table input{
-    border: 2px solid var(--gray);
-    border-radius: 5px;
-    background-color: var(--background-color-block);
-    padding-left: 5px;
-    color: var(--primary-color);
-    font-family: "Agora Slab", sans-serif;
-    font-weight: bold;
-    font-size: 14px;
-    transition: ease-in-out var(--transition);
-}
+    .models-list {
+        display: inline-flex;
+        flex-direction: column;
+    }
 
-.model-table .changed:valid,
-.model-table .changed:active:valid {
-    border-color: var(--accept);
-}
-.model-table .changed:invalid,
-.model-table .changed:active:invalid {
-    border-color: var(--decline);
-}
+    .filter-submit {
+        height: fit-content;
+        font-size: 14px;
+    }
 
-.content-row {
-    visibility: visible;
-}
+    .model-filters {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
 
-.content-row-hidden {
-    visibility: collapse;
-}
+    .column {
+        display: flex;
+        flex-direction: column;
+    }
 
-#main-table-body {
-    transition: ease-in-out var(--transition);
-}
+    .column > a {
+        width: fit-content;
+    }
 
-.filter-column:not(:placeholder-shown),
-.filter-column:not(:placeholder-shown):focus,
-.filter-column:not(:placeholder-shown):active{
-    border-color: var(--accept);
+    .column > label {
+        width: 100%;
+        display: flex;
+    }
+
+    .input-column {
+        min-width: 100px;
+        width: 100%;
+    }
+
+    .model-table td,
+    .model-table th {
+        padding: 10px;
+        text-align: center;
+    }
+
+    .model-table > tbody > tr > th{
+        text-align: right;
+    }
+
+    .table-head > tr > th:first-child{
+        width: 40px;
+    }
+
+    .table-head > tr > th {
+        text-align: right;
+    }
+
+    .model-table button{
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+        border: 2px solid var(--gray);
+        color: var(--gray);
+        transition: ease-in calc(var(--transition) / 2);
+        font-size: 16px;
+        font-family: "Agora Slab", serif;
+        font-weight: bold;
+    }
+
+    .model-table .save-button:hover{
+        background-color: var(--primary-color);
+        color: var(--warning)
+    }
+
+    .save-line {
+        pointer-events: none;
+    }
+
+    .model-table .save-button:active{
+        background-color: var(--accept);
+    }
+
+    .model-table .save-button{
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        cursor: pointer;
+        pointer-events: all;
+    }
+
+
+    .model-table input{
+        border: 2px solid var(--gray);
+        border-radius: 5px;
+        background-color: var(--background-color-block);
+        padding-left: 5px;
+        color: var(--primary-color);
+        font-family: "Agora Slab", sans-serif;
+        font-weight: bold;
+        font-size: 14px;
+        transition: ease-in-out var(--transition);
+    }
+
+    .model-table .changed:valid,
+    .model-table .changed:active:valid {
+        border-color: var(--accept);
+    }
+    .model-table .changed:invalid,
+    .model-table .changed:active:invalid {
+        border-color: var(--decline);
+    }
+
+    .content-row {
+        visibility: visible;
+    }
+
+    .content-row-hidden {
+        visibility: collapse;
+    }
+
+    #main-table-body {
+        transition: ease-in-out var(--transition);
+    }
+
+    .filter-column:not(:placeholder-shown),
+    .filter-column:not(:placeholder-shown):focus,
+    .filter-column:not(:placeholder-shown):active{
+        border-color: var(--accept);
+    }
 }
