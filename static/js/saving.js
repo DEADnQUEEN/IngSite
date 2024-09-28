@@ -8,7 +8,7 @@ function send_row_request(row_sender) {
     let data = {
         'table': document.title,
         'model-content': {
-            'id': Number(table_body.children[row_sender].getElementsByTagName('a')[0].textContent)
+            'id': Number(table_body.children[row_sender].getElementsByTagName('input')[0].value)
         }
     }
 

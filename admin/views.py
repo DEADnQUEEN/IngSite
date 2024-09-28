@@ -80,9 +80,17 @@ def save(request: django.http.request.HttpRequest) -> django.http.response.HttpR
         json_data['table']
     ].objects.filter(id=json_data['model-content']['id'])[0]
 
-    keys = list(json_data['model-content'].keys())
-    for i in range(2, len(keys)):
-        setattr(model_object, keys[i], json_data['model-content'][keys[i]])
+    for k in json_data['model-content'].keys():
+        field: models.models.Field = model_object._meta.get_field(k)
+
+        if isinstance(field, models.models.ForeignKey):
+            f: models.models.ForeignKey = field
+            attr = FILTER_OBJECTS[
+                f.remote_field.model.__name__
+            ].objects.filter(id=json_data['model-content'][k]).first()
+        else:
+            attr = json_data['model-content'][k]
+        setattr(model_object, k, attr)
 
     model_object.save()
 
