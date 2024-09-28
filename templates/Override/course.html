@@ -3,7 +3,7 @@
 {% load db %}
 
 {% block header %}
-    <a class="course-header course-name block">Курс: </a>
+    <a class="course-header course-name block">Курс: {{ student.course.name }}</a>
     <a class="course-header balance block">Баланс: {{ student.finance|count_finances }}₽</a>
 {% endblock %}
 

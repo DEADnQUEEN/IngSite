@@ -19,8 +19,10 @@ with open(os.path.join(BASE_DIR, 'key'), 'r') as file:
     SECRET_KEY = file.readlines()[0]
 
 
-DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1']
+DEBUG = False
+ALLOWED_HOSTS = ['deadqueen.ru', '194.58.104.58']
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 INSTALLED_APPS = [
     'lk',
@@ -98,8 +100,8 @@ USE_TZ = True
 
 AUTH_USER_MODEL = "lk.User"
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
