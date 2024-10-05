@@ -5,6 +5,12 @@
         border-radius: 40px;
     }
 
+    .form-title {
+        font-size: 26px;
+        font-weight: bold;
+        align-self: center;
+    }
+
     .form-fields {
         display: inline-flex;
         flex-direction: column;

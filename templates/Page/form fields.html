@@ -11,7 +11,7 @@
     <form class="block" method="post">
         {% csrf_token %}
         <div class="form-fields">
-            <a>{{ request.title }}</a>
+            <a class="form-title">{{ title }}</a>
             {% for input in form|as_list %}
                 <div class="block form-field">
                     <a class="text-font">{{ input.label }}</a>
