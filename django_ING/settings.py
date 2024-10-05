@@ -20,7 +20,7 @@ with open(os.path.join(BASE_DIR, 'key'), 'r') as file:
 
 
 DEBUG = False
-ALLOWED_HOSTS = ['deadqueen.ru', '194.58.104.58']
+ALLOWED_HOSTS = ['deadqueen.ru', '194.58.104.58', '127.0.0.1']
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 

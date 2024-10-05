@@ -1,49 +1,51 @@
-.student-course {
-    display: flex;
-    flex-direction: column;
-    gap: 60px;
-}
+@media (min-width: 768px) {
+    .student-course {
+        display: flex;
+        flex-direction: column;
+        gap: 60px;
+    }
 
-.student-course > .content-block {
-    display: flex;
-    flex-direction: row;
-    gap: 40px;
-}
+    .student-course > .content-block {
+        display: flex;
+        flex-direction: row;
+        gap: 40px;
+    }
 
-.visit-blocks {
-    width: 70%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 10px;
-    height: fit-content;
-}
+    .visit-blocks {
+        width: 70%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+        height: fit-content;
+    }
 
-.scroll-div {
-    width: 30%;
-    min-width: fit-content;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    border-radius: 10px;
-    overflow-y: scroll;
-}
+    .scroll-div {
+        width: 30%;
+        min-width: fit-content;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        border-radius: 10px;
+        overflow-y: scroll;
+    }
 
-.scroll-div::-webkit-scrollbar {
-    width: 0;
-}
+    .scroll-div::-webkit-scrollbar {
+        width: 0;
+    }
 
-.payment-blocks {
-    padding: 10px;
-    display: flex;
-    flex-direction: row;
-}
+    .payment-blocks {
+        padding: 10px;
+        display: flex;
+        flex-direction: row;
+    }
 
-.course-block > div {
-    gap: 20px;
-}
+    .course-block > div {
+        gap: 20px;
+    }
 
-.course-header {
-    border-radius: 20px;
+    .course-header {
+        border-radius: 20px;
+    }
 }
