@@ -1,0 +1,42 @@
+@media (max-width: 768px) {
+    html {
+        overflow-x: hidden;
+    }
+
+    .form-fields > *:not(:first-child):not(:last-child){
+        width: calc(100vw - 80px);
+    }
+
+    .form-fields {
+        padding: 0;
+    }
+
+    .errors a {
+        font-size: 16px;
+        font-weight: normal;
+    }
+
+    .form-title {
+        font-size: 32px;
+        word-wrap: anywhere;
+    }
+
+    .extension > form {
+        width: 100vw;
+    }
+
+    .policy{
+        text-align: center;
+    }
+
+    .form-sender-label > .button-style {
+        text-align: center;
+        align-self: center;
+        width: fit-content;
+    }
+
+    .form-sender-label{
+        display: inline-flex;
+        width: fit-content;
+    }
+}
