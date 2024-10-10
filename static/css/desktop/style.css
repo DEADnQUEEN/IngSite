@@ -1,45 +1,31 @@
-@media (min-width: 768px) {
-    .students-blocks {
-        display: flex;
-        flex-direction: column;
-        border-radius: 60px;
-        background-color: var(--background-color-block);
-        box-shadow: var(--inside-shadow);
-        padding: 20px;
-        width: 100%;
-        height: fit-content;
-    }
+.students-blocks {
+    display: flex;
+    width: 100%;
+    padding: 20px;
+    border-radius: 40px;
+    flex-direction: column;
+    background-color: var(--background-color-block);
+}
 
-    .student-course-blocks {
-        display: flex;
-        flex-direction: column;
-        padding: 20px;
-        gap: 20px;
-    }
+.students-blocks > div:not(:last-child)::after{
+    width: 50vw;
+    height: 5px;
+    margin: 40px 0;
+    border-radius: 5px;
+    position: relative;
+    background-color: var(--gray);
+    content: '';
+    align-self: center;
+}
 
-    .student-course-blocks:not(:last-child):after {
-        content: '';
-        background: var(--gray);
-        position: relative;
-        height: 4px;
-        margin: 80px 10%;
-        border-radius: 5px;
-    }
+.scroll-div {
+    width: fit-content;
+}
 
-    .phone-path {
-        width: 40px;
-        height: 40px;
-        overflow: hidden;
-    }
+.students-blocks .content-block {
+    width: 100%;
+}
 
-    .student-course-blocks > .content-block {
-        display: flex;
-        flex-direction: column;
-        gap: 100px;
-        padding: 0 20px;
-    }
-
-    .name-block {
-        border-radius: 20px;
-    }
+.all .extension {
+    width: calc(100vw - 10px);
 }

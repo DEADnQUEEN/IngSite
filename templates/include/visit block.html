@@ -3,5 +3,13 @@
 
 <div class="visit-block {{ visit.states|get_tag:'name'|replace_sep:' ' }}"
      title="{{ visit.states|get_tag:'description'|capfirst|replace_sep:', ' }}">
-    <a class="date">{{ visit.date|replace_to_dots:'-' }}</a>
+    <div class="date">
+        <a class="date year">{{ visit.year }}</a>
+        <a class="date month">{{ visit.month }}</a>
+        <a class="date day">{{ visit.day }}</a>
+    </div>
+    <div class="time">
+        <a class="hour">{{ visit.hour }}</a>
+        <a class="minute">{{ visit.minute }}</a>
+    </div>
 </div>

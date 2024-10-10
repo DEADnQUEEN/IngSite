@@ -1,6 +1,7 @@
 import hashlib
 import django.contrib.auth.models
 from django.db import models
+import datetime
 
 
 def model_to_dict(model: models.Model):
@@ -165,6 +166,27 @@ class Visits(models.Model):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.dt = datetime.datetime.strptime(self.date, '%Y-%m-%d %H:%M')
+
+    @property
+    def year(self):
+        return self.dt.strftime('%Y')
+
+    @property
+    def month(self):
+        return self.dt.strftime('%m')
+
+    @property
+    def day(self):
+        return self.dt.strftime('%d')
+
+    @property
+    def hour(self):
+        return self.dt.strftime('%H')
+
+    @property
+    def minute(self):
+        return self.dt.strftime('%M')
 
     @property
     def states(self) -> list[States]:

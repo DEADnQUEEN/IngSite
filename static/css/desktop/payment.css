@@ -1,22 +1,25 @@
-@media (min-width: 768px) {
-    .payment {
-        display: flex;
-        flex-direction: row-reverse;
-        justify-content: space-between;
-        align-self: stretch;
-        justify-self: flex-end;
-        padding: 10px;
-        border-radius: 10px;
-        gap: 20px;
-        min-width: fit-content;
-        margin: 20px;
-    }
+.payment {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    justify-self: flex-end;
+    padding: 10px;
+    gap: 20px;
+    border: var(--input-border-size) solid var(--primary-color);
+}
 
-    .plus {
-        color: var(--accept);
-    }
+.payment:has(a.plus){
+    border-color: var(--accept);
+}
 
-    .minus {
-        color: var(--decline)
-    }
+.payment:has(a.minus){
+    border-color: var(--decline);
+}
+
+.plus {
+    color: var(--accept);
+}
+
+.minus {
+    color: var(--decline)
 }

@@ -1,0 +1,28 @@
+@media (max-width: 768px) {
+    .name-block > a:nth-child(2) {
+        font-size: 0;
+    }
+
+    .name-block {
+        gap: 5px;
+    }
+
+    .students-blocks {
+        padding: 20px;
+        width: 100vw;
+        border-radius: 40px;
+        gap: 30px;
+    }
+
+    .student-course-blocks{
+        padding: 0;
+    }
+
+    .student-course-blocks > .content-block {
+        padding: 0;
+    }
+
+    .student-course-blocks:not(:last-child):after {
+        margin: 10px 10%;
+    }
+}

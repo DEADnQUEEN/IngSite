@@ -1,8 +1,8 @@
-let payment_blocks = document.getElementsByClassName('payment-blocks');
+let blocks = document.querySelectorAll('.payment-blocks');
 
-for (let i = 0; i < payment_blocks.length; i++){
-    let scroll = payment_blocks[i].getElementsByClassName('scroll-div')[0];
-    let scroll_bar = payment_blocks[i].getElementsByClassName('scroll-bar')[0];
+for (let i = 0; i < blocks.length; i++){
+    let scroll = blocks[i].getElementsByClassName('scroll-div')[0];
+    let scroll_bar = blocks[i].getElementsByClassName('scroll-bar')[0];
     let thumb = scroll_bar.getElementsByClassName('scroll-thumb')[0];
 
     let buttons = scroll_bar.getElementsByClassName('scroll-button');

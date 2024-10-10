@@ -1,51 +1,71 @@
-@media (min-width: 768px) {
-    .student-course {
-        display: flex;
-        flex-direction: column;
-        gap: 60px;
-    }
-
-    .student-course > .content-block {
-        display: flex;
-        flex-direction: row;
-        gap: 40px;
-    }
-
-    .visit-blocks {
-        width: 70%;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 10px;
-        height: fit-content;
-    }
-
-    .scroll-div {
-        width: 30%;
-        min-width: fit-content;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        margin: 0;
-        border-radius: 10px;
-        overflow-y: scroll;
-    }
-
-    .scroll-div::-webkit-scrollbar {
-        width: 0;
-    }
-
-    .payment-blocks {
-        padding: 10px;
-        display: flex;
-        flex-direction: row;
-    }
-
-    .course-block > div {
-        gap: 20px;
-    }
-
-    .course-header {
-        border-radius: 20px;
-    }
+.student-course-blocks > .content-block {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    justify-content: space-between;
+    gap: 40px;
 }
+
+.student-course-blocks{
+    width: 100%;
+}
+
+.name-block, .balance, .course-name {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    border-radius: 20px;
+}
+
+svg > g > path {
+    stroke: var(--primary-color);
+}
+
+.name-block > svg {
+    fill: var(--primary-color);
+}
+
+.student-course > .content-block {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.student-course {
+    gap: 20px;
+}
+
+.scroll-div > div {
+    border-radius: 20px;
+}
+
+.scroll-div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: scroll;
+    border-radius: 20px;
+    height: 50vh;
+}
+
+.scroll-div::-webkit-scrollbar{
+    width: 0;
+}
+
+.visit-blocks {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: content-box;
+}
+
+.payment-blocks {
+    min-width: 30vw;
+    height: 50vh;
+}
+
+.payment-blocks > .scroll-div {
+    height: 100%;
+}
+

@@ -1,0 +1,29 @@
+@media (max-width: 768px) {
+    .course-header > a:nth-child(2) {
+        font-size: 0;
+    }
+
+    .course-header {
+        gap: 5px;
+    }
+
+    .student-course > .content-block {
+        flex-direction: column;
+    }
+
+    .visit-blocks {
+        align-content: center;
+        justify-content: center;
+    }
+    .payment-blocks > .scroller {
+        width: fit-content;
+    }
+
+    .payment-blocks {
+        align-self: center;
+    }
+
+    .payment-blocks > .scroller > .scroll-bar {
+        display: none;
+    }
+}
