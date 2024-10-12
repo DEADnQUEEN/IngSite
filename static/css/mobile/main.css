@@ -17,4 +17,12 @@
     .header {
         padding: 20px;
     }
+
+    .header  div {
+        gap: 5px;
+    }
+
+    .header-title {
+        justify-content: center;
+    }
 }

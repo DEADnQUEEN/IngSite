@@ -26,4 +26,36 @@
     .payment-blocks > .scroller > .scroll-bar {
         display: none;
     }
+
+    .student-info {
+        flex-direction: column;
+    }
+
+    .payment-blocks {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .payment-blocks::before,
+    .student-info::before{
+    align-self: center;
+    font-size: 24px;
+    color: var(--primary-color);
+    background-color: var(--background-color-block);
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(15px);
+    padding: 20px 60px;
+    border-radius: 20px;
+    }
+
+    .student-info::before {
+        content: 'Посещения';
+    }
+
+    .payment-blocks::before {
+        content: "Оплаты";
+    }
+    .payment-blocks {
+        gap: 20px
+    }
 }

@@ -12,6 +12,19 @@ def model_to_dict(model: models.Model):
     }
 
 
+def get_states_by_id(state_id: int):
+    text_id = str(state_id)
+
+    states = []
+    for j in range(2):
+        if j < len(text_id):
+            v = States.objects.filter(id=int(text_id[len(text_id) - 1 - j]) * (10 ** j)).first()
+            if v is not None:
+                states.append(v)
+
+    return states
+
+
 class Connect(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
     user = models.ForeignKey('User', models.DO_NOTHING, db_column='User_ID')
@@ -190,16 +203,7 @@ class Visits(models.Model):
 
     @property
     def states(self) -> list[States]:
-        text_id = str(self.state_id)
-
-        states = []
-        for j in range(2):
-            if j < len(text_id):
-                v = States.objects.filter(id=int(text_id[len(text_id) - 1 - j]) * (10 ** j)).first()
-                if v is not None:
-                    states.append(v)
-
-        return states
+        return get_states_by_id(self.state_id)
 
     class Meta:
         managed = False

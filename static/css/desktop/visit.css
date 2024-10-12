@@ -1,0 +1,42 @@
+@media (min-width: 768px) {
+    .visit-block {
+        width: 60px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        background: var(--primary-color);
+        padding: 10px 15px;
+        gap: 5px;
+        border: 5px solid transparent;
+        border-radius: 20px;
+        position: relative;
+    }
+
+    .visit-block a {
+        color: var(--background-color-block);
+        transition: ease-in-out var(--transition);
+        font-size: 14px;
+        font-weight: bold;
+        align-self: center;
+        align-content: center;
+        text-align: center;
+    }
+
+    .changed {
+        border-color: var(--warning);
+    }
+
+    .too-early {
+        background: var(--primary-color);
+    }
+
+    .visited {
+        background: var(--accept);
+    }
+
+    .pass {
+        background: var(--decline);
+    }
+}

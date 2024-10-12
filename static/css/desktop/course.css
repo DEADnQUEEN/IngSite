@@ -25,14 +25,15 @@ svg > g > path {
     fill: var(--primary-color);
 }
 
-.student-course > .content-block {
+.student-info {
     display: flex;
     flex-direction: row;
     gap: 20px;
 }
-
-.student-course {
+.student-course > .content-block {
     gap: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .scroll-div > div {

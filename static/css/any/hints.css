@@ -1,0 +1,25 @@
+.hints {
+    display: inline-flex;
+    flex-direction: row;
+    align-self: center;
+    gap: 10px;
+}
+
+.hints > div{
+    display: inline-flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.hint {
+    border: 5px solid transparent;
+    padding: 5px 10px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.hint > a {
+    color: var(--background-color-block);
+    text-align: center;
+}

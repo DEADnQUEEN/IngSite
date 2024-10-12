@@ -1,0 +1,16 @@
+{% load db %}
+{% load filters %}
+
+{% for visit in 0|get_all_visits %}
+    <div>
+        <div class="hint {{ visit.name }}">
+            <a>{{ visit.description }}</a>
+        </div>
+        {% for state in 0|get_all_states %}
+            <div class="hint {{ state.name }} {{ visit.name }}">
+                <a>{{ visit.description }}, но {{ state.description }}</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endfor %}
+

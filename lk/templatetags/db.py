@@ -65,3 +65,11 @@ def get_initials(value: models.Human):
     return " ".join([value.surname.capitalize(), value.name[0].upper() + ".", value.father_name[0].upper() + "."])
 
 
+@register.filter
+def get_all_visits(_):
+    return models.States.objects.filter(id__range=(10, 99))
+
+
+@register.filter
+def get_all_states(_):
+    return models.States.objects.filter(id__range=(1, 9))
