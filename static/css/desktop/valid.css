@@ -39,6 +39,7 @@ form {
 
 .form-sender-label > .button-style {
     width: 100%;
+    justify-content: center;
 }
 
 .form-field {

@@ -179,27 +179,26 @@ class Visits(models.Model):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.dt = datetime.datetime.strptime(self.date, '%Y-%m-%d %H:%M')
 
     @property
     def year(self):
-        return self.dt.strftime('%Y')
+        return datetime.datetime.strptime(self.date, '%Y-%m-%d %H:%M').year
 
     @property
     def month(self):
-        return self.dt.strftime('%m')
+        return datetime.datetime.strptime(self.date, '%Y-%m-%d %H:%M').month
 
     @property
     def day(self):
-        return self.dt.strftime('%d')
+        return datetime.datetime.strptime(self.date, '%Y-%m-%d %H:%M').day
 
     @property
     def hour(self):
-        return self.dt.strftime('%H')
+        return datetime.datetime.strptime(self.date, '%Y-%m-%d %H:%M').hour
 
     @property
     def minute(self):
-        return self.dt.strftime('%M')
+        return datetime.datetime.strptime(self.date, '%Y-%m-%d %H:%M').minute
 
     @property
     def states(self) -> list[States]:

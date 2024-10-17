@@ -4,7 +4,7 @@
     }
 
     .form-fields > *:not(:first-child):not(:last-child){
-        width: calc(100vw - 80px);
+        width: calc(100vw - 40px);
     }
 
     .form-fields {

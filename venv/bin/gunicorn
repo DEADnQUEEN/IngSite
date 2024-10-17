@@ -1,4 +1,4 @@
-#!/home/deadqueen/IngSite/venv/bin/python3.9
+#!/home/server/IngSite/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
