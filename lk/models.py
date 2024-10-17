@@ -210,7 +210,10 @@ class Visits(models.Model):
 
     @property
     def minute(self):
-        return datetime.datetime.strptime(self.date, '%Y-%m-%d %H:%M').minute
+        m = datetime.datetime.strptime(self.date, '%Y-%m-%d %H:%M').minute.__str__()
+        if len(m) == 1:
+            m = "0" + m
+        return m
 
     @property
     def states(self) -> list[States]:
