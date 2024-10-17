@@ -82,6 +82,18 @@ class Student(models.Model):
         managed = False
         db_table = 'Student'
 
+    def save(
+            self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        super().save(force_insert, force_update, using, update_fields)
+        date = datetime.datetime.strptime(self.course.start, '%Y-%m-%d %H:%M')
+        for i in range(self.course.lessons):
+            date += datetime.timedelta(days=7)
+            print(date.strftime('%Y-%m-%d %H:%M'))
+            print(self.id)
+            v = Visits.objects.create(state_id=10, student_id=self.id, date=date.strftime('%Y-%m-%d %H:%M'))
+            v.save()
+
 
 class Finance(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
