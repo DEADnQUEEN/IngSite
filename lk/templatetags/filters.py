@@ -2,7 +2,7 @@ import decimal
 from django import template
 from typing import Final
 from .. import models
-from ..base_models import Phrase
+from admin.models import Phrase
 from .. import forms
 
 register = template.Library()

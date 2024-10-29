@@ -12,66 +12,66 @@ def model_to_dict(model: models.Model):
     }
 
 
-def get_states_by_id(state_id: int):
+def get_states_by_id(state_id: int) -> list:
     text_id = str(state_id)
 
     states = []
-    for j in range(2):
-        if j < len(text_id):
-            v = States.objects.filter(id=int(text_id[len(text_id) - 1 - j]) * (10 ** j)).first()
-            if v is not None:
-                states.append(v)
+    for j in range(len(text_id)):
+        v = States.objects.filter(id=int(text_id[len(text_id) - 1 - j]) * (10 ** j)).first()
+        if v is not None:
+            states.append(v)
 
     return states
 
 
 class Connect(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
-    user = models.ForeignKey('User', models.DO_NOTHING, db_column='User_ID')
-    student_id = models.ForeignKey('Student', models.DO_NOTHING, db_column='Student_ID')
+    user = models.ForeignKey('User', models.DO_NOTHING)
+    student = models.ForeignKey('Student', models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'Connect'
 
 
 class Courses(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
     name = models.TextField(db_column='Name')
-    start = models.TextField(db_column='Start')
+    date = models.DateField(db_column='Date')
+    time = models.TimeField(db_column='Time')
     lessons = models.IntegerField(db_column='Lessons')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'Courses'
 
 
 class Human(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
-    name = models.TextField(db_column='Name')
-    surname = models.TextField(db_column='Surname')
+    name = models.TextField(db_column='Name', null=False)
+    surname = models.TextField(db_column='Surname', null=False)
     father_name = models.TextField(db_column='Father name')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'Human'
 
 
 class States(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
-    name = models.TextField(db_column='Name')
-    description = models.TextField(db_column='Description', null=False)
+    name = models.TextField(db_column='Name', null=False)
+    description = models.TextField(db_column='Description', null=False, default='?')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'States'
 
 
 class Student(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
-    human_id = models.ForeignKey(Human, models.DO_NOTHING, db_column='HID')
-    course = models.ForeignKey(Courses, models.DO_NOTHING, db_column='Course_ID')
-    state = models.ForeignKey(States, models.DO_NOTHING, db_column='State_ID')
+    human = models.ForeignKey(Human, models.DO_NOTHING)
+    course = models.ForeignKey(Courses, models.DO_NOTHING)
+    state = models.ForeignKey(States, models.DO_NOTHING)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -79,30 +79,34 @@ class Student(models.Model):
         self.finance = Finance.objects.filter(student_id=self.id)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'Student'
 
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
         super().save(force_insert, force_update, using, update_fields)
-        date = datetime.datetime.strptime(self.course.start, '%Y-%m-%d %H:%M')
+        date = self.course.date
         for i in range(self.course.lessons):
             date += datetime.timedelta(days=7)
-            print(date.strftime('%Y-%m-%d %H:%M'))
-            print(self.id)
-            v = Visits.objects.create(state_id=10, student_id=self.id, date=date.strftime('%Y-%m-%d %H:%M'))
+            v = Visits.objects.create(
+                student=self,
+                state_id=10,
+                date=date,
+                time=self.course.time
+            )
             v.save()
 
 
 class Finance(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
-    student_id = models.ForeignKey(Student, models.DO_NOTHING, db_column='SID')
+    student = models.ForeignKey(Student, models.DO_NOTHING, default=0)
     value = models.DecimalField(db_column='Balance', null=False, max_digits=10, decimal_places=2)
-    datatime = models.TextField(db_column='Datetime', null=False)
+    data = models.DateField(db_column='Date', null=False)
+    time = models.TimeField(db_column="Time", null=False)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'Finance'
 
 
@@ -125,24 +129,22 @@ class UserManager(django.contrib.auth.models.BaseUserManager):
         if not phone:
             raise ValueError('The Phone field must be set')
 
-        names = Human.objects.filter(
+        human = Human.objects.filter(
             name=name,
             surname=surname,
             father_name=father_name
-        )
+        ).first()
 
-        if len(names) == 0:
-            human_id = Human(
+        if human is None:
+            human = Human(
                 name=name,
                 surname=surname,
                 father_name=father_name
             )
-            human_id.save()
-        else:
-            human_id = names[0]
+            human.save()
 
         mail = self.normalize_email(mail)
-        user = self.model(phone=phone, mail=mail, login=login, human_id=human_id.id, **extra_fields)
+        user = self.model(phone=phone, mail=mail, login=login, human=human, human_id=human.id, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
 
@@ -160,13 +162,13 @@ class UserManager(django.contrib.auth.models.BaseUserManager):
 
 
 class User(django.contrib.auth.models.AbstractBaseUser, django.contrib.auth.models.PermissionsMixin):
-    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    human_id = models.ForeignKey(Human, models.DO_NOTHING, db_column='Human_ID')  # Field name made lowercase.
-    login = models.TextField(db_column='Login', unique=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='ID', primary_key=True)
+    human = models.ForeignKey(Human, models.DO_NOTHING)
+    login = models.TextField(db_column='Login', unique=True)
     password = models.TextField(db_column='Password')
-    phone = models.TextField(db_column='Phone', unique=True)  # Field name made lowercase.
-    mail = models.TextField(db_column='Mail', unique=True)  # Field name made lowercase.
-    last_login = models.TextField(db_column='Last Login', default=None)
+    phone = models.TextField(db_column='Phone', unique=True)
+    mail = models.TextField(db_column='Mail', unique=True)
+    last_login = models.TextField(db_column='Last Login', default=None, null=True, blank=True)
     is_superuser = models.IntegerField(db_column='IsRoot', default=0)
 
     objects = UserManager()
@@ -174,8 +176,11 @@ class User(django.contrib.auth.models.AbstractBaseUser, django.contrib.auth.mode
     USERNAME_FIELD = 'login'
     REQUIRED_FIELDS = []
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
     class Meta:
-        managed = False
+        managed = True
         db_table = 'User'
         verbose_name = "Пользователь"
 
@@ -184,41 +189,16 @@ class User(django.contrib.auth.models.AbstractBaseUser, django.contrib.auth.mode
 
 
 class Visits(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    student_id = models.IntegerField(db_column='Student_ID')  # Field name made lowercase.
-    date = models.TextField(db_column='Date')  # Field name made lowercase.
-    state_id = models.IntegerField(db_column='State_ID')  # Field name made lowercase.
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    @property
-    def year(self):
-        return datetime.datetime.strptime(self.date, '%Y-%m-%d %H:%M').year
-
-    @property
-    def month(self):
-        return datetime.datetime.strptime(self.date, '%Y-%m-%d %H:%M').month
-
-    @property
-    def day(self):
-        return datetime.datetime.strptime(self.date, '%Y-%m-%d %H:%M').day
-
-    @property
-    def hour(self):
-        return datetime.datetime.strptime(self.date, '%Y-%m-%d %H:%M').hour
-
-    @property
-    def minute(self):
-        m = datetime.datetime.strptime(self.date, '%Y-%m-%d %H:%M').minute.__str__()
-        if len(m) == 1:
-            m = "0" + m
-        return m
+    id = models.AutoField(db_column='ID', primary_key=True)
+    student = models.ForeignKey(Student, on_delete=models.DO_NOTHING, db_column='Student_ID')
+    date = models.DateField(db_column='Date', null=False)
+    time = models.TimeField(db_column='Time', null=False)
+    state_id = models.IntegerField(db_column='State_ID', null=False)
 
     @property
     def states(self) -> list[States]:
         return get_states_by_id(self.state_id)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'Visits'

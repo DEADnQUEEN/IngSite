@@ -1,8 +1,4 @@
 from __future__ import annotations
-
-import datetime
-import json
-
 import django.http.request
 import django.http.response
 import django.shortcuts
@@ -10,7 +6,7 @@ from .forms import UserLogin, UserRegister
 import django.contrib.auth
 import django.db.models.fields.related
 from .models import User, Connect
-from .base_models import Page
+from admin.models import Page
 import hashlib
 from typing import Final
 

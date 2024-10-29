@@ -175,7 +175,7 @@ class UserRegister(django.contrib.auth.forms.UserCreationForm):
             name = names[0]
 
         user = models.User(
-            human_id=name.id,
+            human=name,
             login=self.data['login'],
             password=hashlib.sha3_256(str(self.data['password1']).encode('UTF-8')).hexdigest(),
             phone=self.data['phone'],

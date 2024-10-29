@@ -6,7 +6,7 @@ import django.http.request
 import django.http.response
 import inspect
 from lk import models
-from lk.base_models import Page
+from .models import Page
 import os
 from django.db.models import Field
 from django.db import connections

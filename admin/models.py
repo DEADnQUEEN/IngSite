@@ -1,3 +1,22 @@
 from django.db import models
 
-# Create your models here.
+
+class Page(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True, blank=True, null=False)
+    title = models.TextField(db_column='Title')
+    route = models.TextField(db_column='Route', unique=True)
+    template = models.TextField(db_column='Template')
+
+    class Meta:
+        managed = True
+        db_table = 'Page'
+
+
+class Phrase(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)
+    phrase = models.TextField(db_column='Phrase')
+    tag = models.TextField(db_column='Tag')
+
+    class Meta:
+        managed = True
+        db_table = 'Phrase'
