@@ -2,21 +2,10 @@ import decimal
 from django import template
 from typing import Final
 from .. import models
-from admin.models import Phrase
 from .. import forms
 
 register = template.Library()
 SEP: Final = "_sep_"
-
-
-@register.filter
-def phrase(value):
-    return Phrase.objects.filter(tag=value).first()
-
-
-@register.filter
-def error_phrase(value):
-    return phrase(value + "-error")
 
 
 @register.filter
@@ -83,4 +72,3 @@ def is_register(value):
 @register.filter
 def get_value_from_dict(dictionary: dict, key):
     return dictionary[key]
-

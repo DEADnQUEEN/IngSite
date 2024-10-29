@@ -10,13 +10,3 @@ class Page(models.Model):
     class Meta:
         managed = True
         db_table = 'Page'
-
-
-class Phrase(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)
-    phrase = models.TextField(db_column='Phrase')
-    tag = models.TextField(db_column='Tag')
-
-    class Meta:
-        managed = True
-        db_table = 'Phrase'
