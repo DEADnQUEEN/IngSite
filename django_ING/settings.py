@@ -19,7 +19,7 @@ with open(os.path.join(BASE_DIR, 'key'), 'r') as file:
     SECRET_KEY = file.readlines()[0]
 
 
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['*']
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None

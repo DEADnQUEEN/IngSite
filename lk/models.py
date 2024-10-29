@@ -50,7 +50,7 @@ class Human(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
     name = models.TextField(db_column='Name', null=False)
     surname = models.TextField(db_column='Surname', null=False)
-    father_name = models.TextField(db_column='Father name')
+    father_name = models.TextField(db_column='Father name', null=True, blank=True)
 
     class Meta:
         managed = True
@@ -101,7 +101,7 @@ class Student(models.Model):
 class Finance(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
     student = models.ForeignKey(Student, models.DO_NOTHING, default=0)
-    value = models.DecimalField(db_column='Balance', null=False, max_digits=10, decimal_places=2)
+    amount = models.DecimalField(db_column='Balance', null=False, max_digits=10, decimal_places=2)
     data = models.DateField(db_column='Date', null=False)
     time = models.TimeField(db_column="Time", null=False)
 

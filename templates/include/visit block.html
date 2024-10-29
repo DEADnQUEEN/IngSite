@@ -4,12 +4,12 @@
 <div class="visit-block {{ visit.states|get_tag:'name'|replace_sep:' ' }}"
      title="{{ visit.states|get_tag:'description'|capfirst|replace_sep:', ' }}">
     <div class="date">
-        <a class="date year">{{ visit.year }}</a>
-        <a class="date month">{{ visit.month }}</a>
-        <a class="date day">{{ visit.day }}</a>
+        <a class="date year">{{ visit.date.year }}</a>
+        <a class="date month">{{ visit.date.month }}</a>
+        <a class="date day">{{ visit.date.day }}</a>
     </div>
     <div class="time">
-        <a class="hour">{{ visit.hour }}</a>
-        <a class="minute">{{ visit.minute }}</a>
+        <a class="hour">{{ visit.time.hour }}</a>
+        <a class="minute">{{ visit.time.minute }}</a>
     </div>
 </div>

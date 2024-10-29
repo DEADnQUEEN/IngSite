@@ -155,31 +155,29 @@ class UserRegister(django.contrib.auth.forms.UserCreationForm):
     )
 
     def save(self, commit=True):
-        if self.data['password1'][0] != self.data['password2'][0]:
+        if self.data['password1'] != self.data['password2']:
             raise ValueError("password is not matched")
 
-        names = models.Human.objects.filter(
-            name=self.data['name'][0],
-            surname=self.data['surname'][0],
-            father_name=self.data['father_name'][0]
-        )
+        name = models.Human.objects.filter(
+            name=self.data['name'],
+            surname=self.data['surname'],
+            father_name=self.data['father_name']
+        ).first()
 
-        if len(names) == 0:
+        if name is None:
             name = models.Human(
-                name=self.data['name'][0],
-                surname=self.data['surname'][0],
-                father_name=self.data['father_name'][0]
+                name=self.data['name'],
+                surname=self.data['surname'],
+                father_name=self.data['father_name']
             )
             name.save()
-        else:
-            name = names[0]
 
         user = models.User(
             human=name,
             login=self.data['login'],
             password=hashlib.sha3_256(str(self.data['password1']).encode('UTF-8')).hexdigest(),
             phone=self.data['phone'],
-            mail=self.data['phone'],
+            mail=self.data['mail'],
         )
 
         user.set_password(self.data['password1'])

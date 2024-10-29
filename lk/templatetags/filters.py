@@ -28,6 +28,7 @@ def get_dict_values(value: dict):
 def get_dict_items(value: dict):
     return value.items()
 
+
 @register.filter
 def get_description(value: str, capitalize: bool = False):
     text = " ".join(
@@ -60,7 +61,7 @@ def replace_sep(value: str, replace):
 def count_finances(value: list[models.Finance]):
     s: decimal.Decimal = decimal.Decimal('0.0')
     for i in range(len(value)):
-        s += value[i].value
+        s += value[i].amount
     return round(s, 2)
 
 

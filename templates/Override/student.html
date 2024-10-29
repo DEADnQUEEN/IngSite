@@ -14,7 +14,7 @@
             </g>
         </svg>
         <a>Ученик: </a>
-        <a>{{ students.0.human_id|get_name }}</a>
+        <a>{{ students.0.human.surname|capfirst }} {{ students.0.human.name.0|upper }}. {{ students.0.human.father_name.0|upper }}.</a>
     </div>
 {% endblock %}
 
