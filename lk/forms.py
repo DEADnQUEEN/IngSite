@@ -111,9 +111,8 @@ class UserRegister(django.contrib.auth.forms.UserCreationForm):
             attrs={
                 'class': 'form-input init',
                 'id': 'phone',
-                'placeholder': '+7-(900)-000-00-00',
-                'pattern': '[0-9]{11}',
-                "oninput": "on_input_func(this)"
+                'placeholder': '+71234567890',
+                "oninput": "on_input_func(this)",
             }
         ),
         error_messages={
