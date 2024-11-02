@@ -1,0 +1,15 @@
+<label for="{{ id }}">
+    <select name="{{ options.name }}" id="{{ id }}">
+    {% for key, item_value in values.items %}
+        <option value="{{ key }}"
+        {% if key == value %}
+            selected
+        {% endif %} >
+            {{ item_value }}
+        </option>
+    {% endfor %}
+    {% if value is None %}
+        <option selected hidden value="">{{ options.name }}</option>
+    {% endif %}
+    </select>
+</label>

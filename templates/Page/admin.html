@@ -18,58 +18,7 @@
         </div>
         {% if model is not None %}
             {% csrf_token %}
-            <table class="model-table" id="main-table">
-                <thead class="table-head">
-                    <tr>
-                        {% for column, input in fields.items %}
-                            <th scope="col">
-                                <a>{{ column.name }}</a>
-                            </th>
-                        {% endfor %}
-                        <th colspan="2">
-                            <button onclick="save_table()" class="save-button">save table</button>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="main-table-body">
-                <tr class="top-row">
-                    {% for column, input in fields.items %}
-                        <th>
-                            <label>
-                                <input class="input-column filter-column" minlength="1" placeholder="{{ column.name }}" id="{{ column.name }}" name="{{ column.name }}" type="{{ input }}">
-                            </label>
-                        </th>
-                    {% endfor %}
-                    <th>
-                        <button class="save-button" onclick="add_row()">add</button>
-                    </th>
-                </tr>
-                {% for model in models %}
-                    <tr class="content-row">
-                        {% for column, input in fields.items %}
-                            <th class="column-{{ column.name }}">
-                                <label>
-                                    <input id="model-{{ forloop.parentloop.counter }}-{{ column.name }}"
-                                           value="{{ model|column_value:column }}"
-                                           class="input-column"
-                                           placeholder="{{ column.name }}"
-                                           oninput="update(this)"
-                                           name="model-{{ column.name }}"
-                                           type="{{ input }}"
-                                           minlength="1"
-                                           {% if forloop.first %}
-                                               readonly
-                                           {% endif %}>
-                                </label>
-                            </th>
-                        {% endfor %}
-                        <td colspan="2">
-                            <button class="save-line" id="row-sender-{{ forloop.counter }}" onclick="send_row_request({{ forloop.counter }})">save</button>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            {% include 'include/admin table.html' with content=content models=models %}
         {% else %}
             <a>Choose the model</a>
         {% endif %}

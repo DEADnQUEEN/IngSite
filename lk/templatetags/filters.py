@@ -37,6 +37,11 @@ def concat(value, unite_to):
 
 
 @register.filter
+def value_by_index(values: iter, index: int):
+    return values[index]
+
+
+@register.filter
 def replace_to_dots(value: str, replace):
     return value.replace(replace, '.')
 

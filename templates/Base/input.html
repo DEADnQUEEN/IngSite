@@ -1,0 +1,10 @@
+{% load filters %}
+
+<label for="{{ id }}">
+    <input name="{{ options.name }}"
+           id="{{ id }}" type="{{ options.type }}"
+           {% if value is not None %}
+           value="{{ value }}"
+           {% endif %}
+           placeholder="{{ options.name }}">
+</label>

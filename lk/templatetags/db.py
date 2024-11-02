@@ -10,7 +10,7 @@ register = template.Library()
 def get_from_db(model_id: int, model):
     item = model.objects.filter(id=model_id).first()
     if item is None:
-        raise ValueError
+        raise ValueError()
     return models.model_to_dict(item)
 
 

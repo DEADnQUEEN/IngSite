@@ -1,0 +1,5 @@
+{% load db %}
+
+{% for field, content in content.items %}
+    {% include 'Base/field.html' with field=field content=content models=models %}
+{% endfor %}

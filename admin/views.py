@@ -4,28 +4,64 @@ from typing import Final
 from django.shortcuts import render
 import django.http.request
 import django.http.response
-import inspect
 from lk import models
 from .models import Page
 import os
 from django.db.models import Field
+from django.template.loader import render_to_string
 from django.db import connections
 
 
-FILTER_OBJECTS: Final[dict[str: django.db.models.Model]] = {
-    member[0]: member[1]
-    for member in inspect.getmembers(models, inspect.isclass)
-    if models.models.Model in member[1].__bases__
+def common_options(field: django.db.models.Field) -> dict:
+    print(field.model.objects.all())
+    f_type = field.db_type(connections['default'])
+    return {
+        "name": field.verbose_name,
+        "type": f_type if f_type not in ['integer', 'float'] else "number",
+        "values": [
+            field.value_from_object(model)
+            for model in field.model.objects.all()
+        ]
+    }
+
+
+def input_options(field: django.db.models.Field) -> dict[str, any]:
+    return {
+        'template': "Base/input.html",
+        'options': common_options(field),
+    }
+
+
+def foreign_key_options(field: django.db.models.ForeignKey) -> dict[str, any]:
+    return {
+        "template": "Base/combobox.html",
+        "options": common_options(field),
+        "objects": {
+            obj.id: obj.__str__()
+            for obj in field.related_model.objects.all()
+        }
+    }
+
+
+# model_name: (model_class, (name_of_hidden_fields))
+FILTER_OBJECTS: Final[dict[str: tuple[django.db.models.Model, list[str]]]] = {
+    model.__name__: (
+        model, [
+            field.name for field in model._meta.fields
+        ]
+    )
+    for model in [
+        models.User, models.Student, models.Visits, models.Courses, models.Finance, models.Human, models.Connect
+    ]
 }
 
-FILTER_OBJECTS['User'] = models.User
+for remove_item in ['password', 'is_superuser', 'last_login']:
+    FILTER_OBJECTS['User'][1].remove(remove_item)
 
-FILTER_OBJECTS_HIDE: Final[dict[str: tuple]] = {
-    key: ()
-    for key in FILTER_OBJECTS.keys()
+TODO: dict[any, callable] = {
+    models.models.AutoField: input_options,
+    models.models.ForeignKey: foreign_key_options
 }
-
-FILTER_OBJECTS_HIDE['User'] = ('password', 'last_login', 'is_superuser')
 
 
 def main(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
@@ -98,22 +134,32 @@ def save(request: django.http.request.HttpRequest) -> django.http.response.HttpR
 
 
 def filter_page(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
-    model_name = os.path.split(request.path)[-1]
-    render_object = {
-        'title': model_name,
-        "model": FILTER_OBJECTS[model_name],
-        "models": FILTER_OBJECTS[model_name].objects.all()
+    model: django.db.models.Model = FILTER_OBJECTS[os.path.split(request.path)[-1]][0]
+    print(model.objects.all())
+    render_object: dict[str, any] = {
+        'title': model.__name__,
+        "model": model,
+        "content": {}
     }
 
-    fields: list[Field] = render_object['model']._meta.fields
-    render_object['fields'] = {}
-    for i in range(len(fields)):
-        if fields[i].name in FILTER_OBJECTS_HIDE[model_name]:
-            continue
-        if fields[i].db_type(connections['default']) not in ["integer", 'float']:
-            render_object['fields'][fields[i]] = fields[i].db_type(connections['default'])
-        else:
-            render_object['fields'][fields[i]] = "number"
+    field_order: tuple[dict, dict[str, any]] = (
+        {}, {}
+    )
+    actions = (
+        lambda f: TODO[type(field)](f),
+        lambda f: input_options(f),
+    )
+
+    field_names = FILTER_OBJECTS[model.__name__][1]
+
+    for i in range(len(field_names)):
+        field = model._meta.get_field(field_names[i])
+        is_order = type(field) not in TODO.keys()
+        field_order[is_order][field] = actions[is_order](field)
+
+    for order in field_order:
+        for key in order.keys():
+            render_object['content'][key] = order[key]
 
     return django.shortcuts.render(
         request,

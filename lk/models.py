@@ -24,14 +24,17 @@ def get_states_by_id(state_id: int) -> list:
     return states
 
 
-class Connect(models.Model):
+class States(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
-    user = models.ForeignKey('User', models.DO_NOTHING)
-    student = models.ForeignKey('Student', models.DO_NOTHING)
+    name = models.TextField(db_column='Name', null=False)
+    description = models.TextField(db_column='Description', null=False, default='?')
 
     class Meta:
         managed = True
-        db_table = 'Connect'
+        db_table = 'States'
+
+    def __str__(self):
+        return self.name
 
 
 class Courses(models.Model):
@@ -45,6 +48,9 @@ class Courses(models.Model):
         managed = True
         db_table = 'Courses'
 
+    def __str__(self):
+        return self.name
+
 
 class Human(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
@@ -56,58 +62,15 @@ class Human(models.Model):
         managed = True
         db_table = 'Human'
 
+    @property
+    def full_name(self):
+        full_name = [self.surname, self.name]
+        if self.father_name is not None:
+            full_name.append(self.father_name)
+        return ' '.join(full_name)
 
-class States(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)
-    name = models.TextField(db_column='Name', null=False)
-    description = models.TextField(db_column='Description', null=False, default='?')
-
-    class Meta:
-        managed = True
-        db_table = 'States'
-
-
-class Student(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)
-    human = models.ForeignKey(Human, models.DO_NOTHING)
-    course = models.ForeignKey(Courses, models.DO_NOTHING)
-    state = models.ForeignKey(States, models.DO_NOTHING)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.visits = Visits.objects.filter(student_id=self.id)
-        self.finance = Finance.objects.filter(student_id=self.id)
-
-    class Meta:
-        managed = True
-        db_table = 'Student'
-
-    def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None
-    ):
-        super().save(force_insert, force_update, using, update_fields)
-        date = self.course.date
-        for i in range(self.course.lessons):
-            date += datetime.timedelta(days=7)
-            v = Visits.objects.create(
-                student=self,
-                state_id=10,
-                date=date,
-                time=self.course.time
-            )
-            v.save()
-
-
-class Finance(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)
-    student = models.ForeignKey(Student, models.DO_NOTHING, default=0)
-    amount = models.DecimalField(db_column='Balance', null=False, max_digits=10, decimal_places=2)
-    data = models.DateField(db_column='Date', null=False)
-    time = models.TimeField(db_column="Time", null=False)
-
-    class Meta:
-        managed = True
-        db_table = 'Finance'
+    def __str__(self):
+        return self.full_name
 
 
 class UserManager(django.contrib.auth.models.BaseUserManager):
@@ -176,9 +139,6 @@ class User(django.contrib.auth.models.AbstractBaseUser, django.contrib.auth.mode
     USERNAME_FIELD = 'login'
     REQUIRED_FIELDS = []
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     class Meta:
         managed = True
         db_table = 'User'
@@ -186,6 +146,58 @@ class User(django.contrib.auth.models.AbstractBaseUser, django.contrib.auth.mode
 
     def set_password(self, password: str):
         self.password = hashlib.sha3_256(password.encode()).hexdigest()
+
+    def __str__(self):
+        return str(self.human)
+
+
+class Student(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)
+    human = models.ForeignKey(Human, models.DO_NOTHING)
+    course = models.ForeignKey(Courses, models.DO_NOTHING)
+    state = models.ForeignKey(States, models.DO_NOTHING)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.visits = Visits.objects.filter(student_id=self.id)
+        self.finance = Finance.objects.filter(student_id=self.id)
+
+    class Meta:
+        managed = True
+        db_table = 'Student'
+
+    def __str__(self):
+        return str(self.human)
+
+    def save(
+            self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        super().save(force_insert, force_update, using, update_fields)
+        date = self.course.date
+        for i in range(self.course.lessons):
+            date += datetime.timedelta(days=7)
+            v = Visits.objects.create(
+                student=self,
+                state_id=10,
+                date=date,
+                time=self.course.time
+            )
+            v.save()
+
+
+class Finance(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)
+    student = models.ForeignKey(Student, on_delete=models.DO_NOTHING, db_column='Student_ID')
+    amount = models.DecimalField(db_column='Balance', null=False, max_digits=10, decimal_places=2)
+    data = models.DateField(db_column='Date', null=False)
+    time = models.TimeField(db_column="Time", null=False)
+
+    class Meta:
+        managed = True
+        db_table = 'Finance'
+
+    def __str__(self):
+        return str(self.student)
 
 
 class Visits(models.Model):
@@ -202,3 +214,19 @@ class Visits(models.Model):
     class Meta:
         managed = True
         db_table = 'Visits'
+
+    def __str__(self):
+        return str(self.student)
+
+
+class Connect(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)
+    user = models.ForeignKey(User, models.DO_NOTHING)
+    student = models.ForeignKey(Student, models.DO_NOTHING)
+
+    class Meta:
+        managed = True
+        db_table = 'Connect'
+
+    def __str__(self):
+        return self.id.__str__()

@@ -1,0 +1,11 @@
+{% load filters %}
+
+<div class="admin-table-field">
+    <a class="field-name">{{ field.name }}</a>
+    {% include content.template with id=field.name options=content.options values=content.objects %}
+    {% for value in content.options.values %}
+        {% with field.name|concat:"-"|concat:forloop.counter0 as id %}
+            {% include content.template with id=id options=content.options values=content.objects value=value %}
+        {% endwith %}
+    {% endfor %}
+</div>
