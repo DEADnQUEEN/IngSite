@@ -1,5 +1,8 @@
 <label for="{{ id }}">
-    <select name="{{ options.name }}" id="{{ id }}">
+    <select id="{{ id }}"
+        {% for option, content in options.items %}
+            {{ option }}="{{ content }}"
+        {% endfor %}>
     {% for key, item_value in values.items %}
         <option value="{{ key }}"
         {% if key == value %}

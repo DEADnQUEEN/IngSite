@@ -8,12 +8,10 @@ from lk import models
 from .models import Page
 import os
 from django.db.models import Field
-from django.template.loader import render_to_string
 from django.db import connections
 
 
 def common_options(field: django.db.models.Field) -> dict:
-    print(field.model.objects.all())
     f_type = field.db_type(connections['default'])
     return {
         "name": field.verbose_name,
@@ -29,6 +27,17 @@ def input_options(field: django.db.models.Field) -> dict[str, any]:
     return {
         'template': "Base/input.html",
         'options': common_options(field),
+    }
+
+
+def id_options(field: django.db.models.AutoField) -> dict[str, any]:
+    return {
+        "template": "Base/cmb_id.html",
+        "options": common_options(field),
+        "objects": {
+            obj.id: obj.id
+            for obj in field.model.objects.all()
+        }
     }
 
 
@@ -59,7 +68,7 @@ for remove_item in ['password', 'is_superuser', 'last_login']:
     FILTER_OBJECTS['User'][1].remove(remove_item)
 
 TODO: dict[any, callable] = {
-    models.models.AutoField: input_options,
+    models.models.AutoField: id_options,
     models.models.ForeignKey: foreign_key_options
 }
 
@@ -135,7 +144,6 @@ def save(request: django.http.request.HttpRequest) -> django.http.response.HttpR
 
 def filter_page(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
     model: django.db.models.Model = FILTER_OBJECTS[os.path.split(request.path)[-1]][0]
-    print(model.objects.all())
     render_object: dict[str, any] = {
         'title': model.__name__,
         "model": model,

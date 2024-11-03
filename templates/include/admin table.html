@@ -1,5 +1,9 @@
 {% load db %}
 
-{% for field, content in content.items %}
-    {% include 'Base/field.html' with field=field content=content models=models %}
-{% endfor %}
+<div class="admin-fields">
+    {% for field, content in content.items %}
+        <div class="admin-field-content">
+            {% include 'Base/field.html' with field=field content=content models=models %}
+        </div>
+    {% endfor %}
+</div>
