@@ -1,0 +1,45 @@
+.admin-fields, .admin-fields * {
+    margin: 0;
+    padding: 0;
+}
+
+.admin-fields {
+    display: grid;
+    place-content: center;
+    row-gap: 10px;
+    column-gap: 20px;
+    grid-template-columns: repeat(var(--c), max-content);
+}
+
+.admin-fields > label {
+    display: flex;
+}
+
+.admin-fields > label > * {
+    width: 100%;
+    display: flex;
+    padding: 0 5px;
+    border-radius: 5px;
+    background-color: var(--background-color-block);
+    border: 2px solid var(--primary-color);
+}
+
+.admin-fields > label > *:disabled {
+    background-color: var(--background-color-block);
+    border: 2px solid transparent;
+    opacity: 1;
+    color: var(--primary-color);
+    appearance: none;
+    font-size: 1.2em;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+    text-align: center;
+}
+
+.admin-fields > a {
+    text-align: center;
+}
+
+.admin-fields > button {
+    padding: 0 10px;
+}

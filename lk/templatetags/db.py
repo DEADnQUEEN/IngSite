@@ -20,6 +20,14 @@ def column_value(model: django.db.models.Model, column: django.db.models.Field):
 
 
 @register.filter
+def dict_key(dictionary: dict, key):
+    if key not in dictionary.keys():
+        raise KeyError(f"{key} is not exists")
+
+    return dictionary[key]
+
+
+@register.filter
 def get_model_list(_):
     return [key for key in FILTER_OBJECTS.keys()]
 

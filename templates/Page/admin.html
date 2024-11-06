@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{% static '/css/any/header-content.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static '/css/any/scroll.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static '/css/desktop/admin.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/desktop/table.css' %}"/>
     <script type="text/javascript" src="{% static '/js/add.js' %}" defer></script>
     <script type="text/javascript" src="{% static '/js/saving.js' %}" defer></script>
     <script type="text/javascript" src="{% static '/js/filters.js' %}" defer></script>
@@ -18,7 +19,7 @@
         </div>
         {% if model is not None %}
             {% csrf_token %}
-            {% include 'include/admin table.html' with content=content models=models %}
+            {% include 'include/admin table.html' with models=values fields=fields %}
         {% else %}
             <a>Choose the model</a>
         {% endif %}

@@ -1,31 +1,22 @@
-function add_row() {
-    if (document.querySelector('.filter-column#id:placeholder-shown') == null){
-        return;
-    }
+function add(el_class) {
+    let xhr = new XMLHttpRequest();
+    let inputs = document.querySelectorAll("." + el_class + " > *:not(#id)");
 
-    if (document.querySelectorAll('.content-row-filtered').length > 0){
-        return;
-    }
-
-    if (document.querySelectorAll('.filter-column:not(#id):placeholder-shown').length !== 0){
-        return;
-    }
-
-    let inputs = document.querySelectorAll('.filter-column:not(#id):not(:placeholder-shown)');
     let data = {
         'table': document.title,
         'model-content': {}
     }
-    for (let i = 0; i < inputs.length; i++){
-        if (inputs[i].type === 'number'){
-            data['model-content'][inputs[i].placeholder] = Number(inputs[i].value)
+
+    for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].value.length === 0){
+            return;
         }
-        else {
-            data['model-content'][inputs[i].placeholder] = inputs[i].value
+
+        data['model-content'][inputs[i].name] = inputs[i].value;
+        if (inputs[i].type === 'number') {
+            data['model-content'][inputs[i].name] = Number(inputs[i].value);
         }
     }
-
-    let xhr = new XMLHttpRequest()
 
     xhr.open("POST", '/admin/add')
 

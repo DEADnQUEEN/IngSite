@@ -9,6 +9,7 @@ from .models import Page
 import os
 from django.db.models import Field
 from django.db import connections
+from django.forms.models import model_to_dict
 
 
 def common_options(field: django.db.models.Field) -> dict:
@@ -16,10 +17,6 @@ def common_options(field: django.db.models.Field) -> dict:
     return {
         "name": field.verbose_name,
         "type": f_type if f_type not in ['integer', 'float'] else "number",
-        "values": [
-            field.value_from_object(model)
-            for model in field.model.objects.all()
-        ]
     }
 
 
@@ -31,25 +28,27 @@ def input_options(field: django.db.models.Field) -> dict[str, any]:
 
 
 def id_options(field: django.db.models.AutoField) -> dict[str, any]:
-    return {
+    opt = {
         "template": "Base/cmb_id.html",
-        "options": common_options(field),
-        "objects": {
-            obj.id: obj.id
-            for obj in field.model.objects.all()
-        }
+        "options": common_options(field)
     }
+    opt["options"]["objects"] = {
+        obj.id: obj.id
+        for obj in field.model.objects.all()
+    }
+    return opt
 
 
 def foreign_key_options(field: django.db.models.ForeignKey) -> dict[str, any]:
-    return {
+    opt = {
         "template": "Base/combobox.html",
-        "options": common_options(field),
-        "objects": {
-            obj.id: obj.__str__()
-            for obj in field.related_model.objects.all()
-        }
+        "options": common_options(field)
     }
+    opt["options"]["objects"] = {
+        obj.id: str(obj)
+        for obj in field.related_model.objects.all()
+    }
+    return opt
 
 
 # model_name: (model_class, (name_of_hidden_fields))
@@ -97,7 +96,7 @@ def add(request: django.http.request.HttpRequest) -> django.http.response.HttpRe
 
     json_data: dict = json.loads(request.body)
 
-    model: models.models.Model = FILTER_OBJECTS[json_data['table']]
+    model: models.models.Model = FILTER_OBJECTS[json_data['table']][0]
 
     data = {}
 
@@ -107,11 +106,11 @@ def add(request: django.http.request.HttpRequest) -> django.http.response.HttpRe
             f: models.models.ForeignKey = field
             data[k] = FILTER_OBJECTS[
                 f.remote_field.model.__name__
-            ].objects.filter(id=json_data['model-content'][k]).first()
+            ][0].objects.filter(id=json_data['model-content'][k]).first()
         else:
             data[k] = json_data['model-content'][k]
 
-    FILTER_OBJECTS[json_data['table']].objects.create(**data)
+    model(**data).save()
 
     return django.http.response.HttpResponse("")
 
@@ -123,7 +122,7 @@ def save(request: django.http.request.HttpRequest) -> django.http.response.HttpR
 
     model_object: models.models.Model = FILTER_OBJECTS[
         json_data['table']
-    ].objects.filter(id=json_data['model-content']['id'])[0]
+    ][0].objects.filter(id=json_data['model-content']['id'])[0]
 
     for k in json_data['model-content'].keys():
         field: models.models.Field = model_object._meta.get_field(k)
@@ -132,7 +131,7 @@ def save(request: django.http.request.HttpRequest) -> django.http.response.HttpR
             f: models.models.ForeignKey = field
             attr = FILTER_OBJECTS[
                 f.remote_field.model.__name__
-            ].objects.filter(id=json_data['model-content'][k]).first()
+            ][0].objects.filter(id=json_data['model-content'][k]).first()
         else:
             attr = json_data['model-content'][k]
         setattr(model_object, k, attr)
@@ -144,30 +143,24 @@ def save(request: django.http.request.HttpRequest) -> django.http.response.HttpR
 
 def filter_page(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
     model: django.db.models.Model = FILTER_OBJECTS[os.path.split(request.path)[-1]][0]
-    render_object: dict[str, any] = {
-        'title': model.__name__,
-        "model": model,
-        "content": {}
-    }
-
-    field_order: tuple[dict, dict[str, any]] = (
-        {}, {}
-    )
-    actions = (
-        lambda f: TODO[type(field)](f),
-        lambda f: input_options(f),
-    )
 
     field_names = FILTER_OBJECTS[model.__name__][1]
 
+    fields = {}
     for i in range(len(field_names)):
-        field = model._meta.get_field(field_names[i])
-        is_order = type(field) not in TODO.keys()
-        field_order[is_order][field] = actions[is_order](field)
+        field: Field = model._meta.get_field(field_names[i])
+        tp = type(field)
+        func = input_options
+        if tp in TODO.keys():
+            func = TODO[tp]
+        fields[field.name] = func(field)
 
-    for order in field_order:
-        for key in order.keys():
-            render_object['content'][key] = order[key]
+    render_object: dict[str, any] = {
+        'title': model.__name__,
+        "model": model,
+        "fields": fields,
+        "values": (model_to_dict(m, fields=field_names) for m in model.objects.all())
+    }
 
     return django.shortcuts.render(
         request,

@@ -1,9 +1,22 @@
 {% load db %}
+{% load filters %}
 
-<div class="admin-fields">
-    {% for field, content in content.items %}
-        <div class="admin-field-content">
-            {% include 'Base/field.html' with field=field content=content models=models %}
-        </div>
+<div class="admin-fields"  style="--c:{{ fields|length|add:2 }}">
+    <a>N</a>
+    {% with 'header-labels' as class %}
+        {% for field, option in fields.items %}
+            {% include option.template with options=option.options id=option.options.name class=class %}
+        {% endfor %}
+        <button class="table-button" id="save-table" onclick="add('{{ class }}')">add model</button>
+    {% endwith %}
+
+    {% for model in models %}
+        {% with 'model-labels-'|concat:forloop.counter0 as class %}
+            <a>{{ forloop.counter }}</a>
+            {% for field, option in fields.items %}
+                {% include option.template with id=option.options.name|concat:'-'|concat:forloop.parentloop.counter value=model|dict_key:field options=option.options class=class %}
+            {% endfor %}
+            <button class="table-button" id="save-row-{{ forloop.counter0 }}" onclick="save('{{ class }}')">save</button>
+        {% endwith %}
     {% endfor %}
 </div>
