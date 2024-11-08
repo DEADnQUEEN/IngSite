@@ -1,10 +1,9 @@
 {% load filters %}
-
 <label for="{{ id }}" class="{{ class }}">
     <input  name="{{ options.name }}"
             type="{{ options.type }}"
             {% if value is not None %}
-            value="{{ value }}"
+            value="{{ value|as_str }}"
             {% endif %}
             id="{{ id }}"
             placeholder="{{ options.name }}">

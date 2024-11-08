@@ -1,3 +1,4 @@
+import datetime
 import decimal
 from django import template
 from typing import Final
@@ -66,6 +67,10 @@ def as_list(value: iter):
 
 @register.filter
 def as_str(value):
+    if isinstance(value, datetime.time):
+        return value.strftime('%H:%M')
+    if isinstance(value, datetime.date):
+        return value.strftime('%Y-%m-%d')
     return str(value)
 
 

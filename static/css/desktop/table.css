@@ -40,6 +40,19 @@
     text-align: center;
 }
 
-.admin-fields > button {
+
+.table-button {
+    border: var(--input-border-size) solid var(--primary-color);
+    background-color: transparent;
+    color: var(--primary-color);
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
     padding: 0 10px;
+    transition: ease-in-out var(--transition);
+}
+
+.table-button:hover{
+    background-color: var(--primary-color);
+    color: var(--background-color);
 }
