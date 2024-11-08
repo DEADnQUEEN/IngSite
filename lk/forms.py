@@ -77,7 +77,6 @@ class UserRegister(django.contrib.auth.forms.UserCreationForm):
                 "oninput": "on_input_func(this)",
             }
         ),
-        error_messages={}
     )
     surname = forms.CharField(
         label='Фамилия',
@@ -90,7 +89,6 @@ class UserRegister(django.contrib.auth.forms.UserCreationForm):
                 "oninput": "on_input_func(this)",
             }
         ),
-        error_messages={}
     )
     father_name = forms.CharField(
         label='Отчество',

@@ -26,6 +26,9 @@
                 {% endif %}
                 </div>
             {% endfor %}
+            {% for message in messages %}
+               <a class="error-message">{{ message }}</a>
+            {% endfor %}
             {% if form|is_register %}
                 <div class="policy">
                     <div class="text-font">

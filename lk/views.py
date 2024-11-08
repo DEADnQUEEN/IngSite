@@ -8,13 +8,7 @@ import django.db.models.fields.related
 from .models import User, Connect
 from admin.models import Page
 import hashlib
-from typing import Final
-
-
-HELL: Final = {
-    'integer': int,
-    'text': str
-}
+from django.contrib import messages
 
 
 def login(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
@@ -24,7 +18,39 @@ def login(request: django.http.request.HttpRequest) -> django.http.response.Http
         raise Exception()
 
     if request.method == 'GET':
-        form = UserLogin()
+        return django.shortcuts.render(
+            request,
+            page.template,
+            {
+                'title': page.title,
+                "form": UserLogin()
+            }
+        )
+
+    form = UserLogin(request.POST)
+
+    if not form.is_valid():
+        return django.shortcuts.render(
+            request,
+            page.template,
+            {
+                'title': page.title,
+                "content": {
+                    'inputs': form
+                }
+            }
+        )
+
+    user_login = User.objects.filter(login=form.data['login']).first()
+    user_phone = User.objects.filter(phone=form.data['login']).first()
+    user_mail = User.objects.filter(mail=form.data['login']).first()
+
+    user: User = user_login if user_login is not None \
+        else user_mail if user_mail is not None \
+        else user_phone
+
+    if user is None:
+        messages.error(request, 'Логин, Телефон или Почта введены неверно')
         return django.shortcuts.render(
             request,
             page.template,
@@ -34,26 +60,17 @@ def login(request: django.http.request.HttpRequest) -> django.http.response.Http
             }
         )
 
-    form = UserLogin(request.POST)
-
-    if not form.is_valid():
-        return django.shortcuts.render(request, page.template, {'title': page.title, "content": {'inputs': list(form)}})
-
-    user_password_match = User.objects.filter(
-        password=hashlib.sha3_256(str(form.data['password']).encode('UTF-8')).hexdigest()
-    )
-
-    user_login = user_password_match.filter(login=form.data['login']).first()
-    user_phone = user_password_match.filter(phone=form.data['login']).first()
-    user_mail = user_password_match.filter(mail=form.data['login']).first()
-
-    user = user_login if user_login is not None \
-        else user_mail if user_mail is not None \
-        else user_phone
-
-    if user is not None:
-        django.contrib.auth.login(request, user)
-
+    if user.password != hashlib.sha3_256(str(form.data['password']).encode('UTF-8')).hexdigest():
+        messages.error(request, 'Пароль неверный')
+        return django.shortcuts.render(
+            request,
+            page.template,
+            {
+                'title': page.title,
+                "form": form
+            }
+        )
+    django.contrib.auth.login(request, user)
     return django.shortcuts.redirect('/lk')
 
 
