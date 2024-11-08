@@ -8,7 +8,7 @@ import django.contrib
 
 class UserLogin(forms.Form):
     login = forms.CharField(
-        label='Логин / Телефон / Почта',
+        label='Логин, Телефон или Почта',
         widget=forms.TextInput(
             attrs={
                 'class': 'form-input init',
