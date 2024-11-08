@@ -19,3 +19,11 @@ phone.addEventListener(
         }
     }
 )
+phone.addEventListener(
+    'keyup',
+    () => {
+        phone.value = phone.value.replace(/[^0-9+]/g, "");
+        phone.focus();
+        phone.setSelectionRange(phone.value.length, phone.value.length);
+    }
+)
