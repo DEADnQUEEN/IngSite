@@ -1,3 +1,4 @@
+import calendar
 import datetime
 import decimal
 from django import template
@@ -57,6 +58,21 @@ def count_finances(value: list[models.Finance]):
     s: decimal.Decimal = decimal.Decimal('0.0')
     for i in range(len(value)):
         s += value[i].amount
+    return round(s, 2)
+
+
+@register.filter
+def count_coins(value: list[models.Coins]):
+    s: decimal.Decimal = decimal.Decimal('0.0')
+    if len(value) == 0:
+        return s
+    last_date: datetime.date = value[0].data
+    i = 0
+    while i < len(value):
+        s *= 1.12
+        while value[i].data.month == last_date.month and i < len(value):
+            s += value[i].coins
+            i += 1
     return round(s, 2)
 
 

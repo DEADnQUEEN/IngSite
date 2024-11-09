@@ -161,6 +161,7 @@ class Student(models.Model):
         super().__init__(*args, **kwargs)
         self.visits = Visits.objects.filter(student_id=self.id)
         self.finance = Finance.objects.filter(student_id=self.id)
+        self.coins = Coins.objects.filter(student_id=self.id)
 
     class Meta:
         managed = True
@@ -195,6 +196,20 @@ class Finance(models.Model):
     class Meta:
         managed = True
         db_table = 'Finance'
+
+    def __str__(self):
+        return str(self.student)
+
+
+class Coins(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)
+    student = models.ForeignKey(Student, on_delete=models.DO_NOTHING, db_column='Student_ID')
+    coins = models.DecimalField(db_column='Balance', null=False, max_digits=10, decimal_places=2)
+    data = models.DateField(db_column='Date', null=False)
+
+    class Meta:
+        managed = True
+        db_table = 'Coins'
 
     def __str__(self):
         return str(self.student)
