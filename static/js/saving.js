@@ -3,13 +3,6 @@ function update(input_field) {
     input_field.parentNode.parentNode.parentNode.querySelectorAll('button')[0].classList.add('save-button');
 }
 
-function save_table() {
-    let buttons = document.getElementsByClassName("table-button");
-    for (let i = 0; i < buttons.length; i++){
-        buttons[i].click();
-    }
-}
-
 function save(el_class){
     let xhr = new XMLHttpRequest();
     let inputs = document.querySelectorAll("." + el_class + " > *");
@@ -25,8 +18,6 @@ function save(el_class){
             data['model-content'][inputs[i].name] = Number(inputs[i].value);
         }
     }
-    console.log(data['model-content']);
-    return;
 
     xhr.open("POST", '/admin/save')
 

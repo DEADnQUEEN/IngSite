@@ -9,6 +9,11 @@
     width: fit-content;
     box-shadow: var(--inside-shadow);
     gap: 20px;
+    overflow-x: scroll;
+}
+
+.admin-content::-webkit-scrollbar{
+    display: none;
 }
 
 .admin-button {
