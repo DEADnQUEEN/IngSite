@@ -1,6 +1,7 @@
 .visit-block {
     height: fit-content;
-    min-width: fit-content;
+    min-width: min-content;
+    width: 180px;
     display: flex;
     justify-content: center;
     flex-direction: column;

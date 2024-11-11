@@ -91,6 +91,11 @@ def as_str(value):
 
 
 @register.filter
+def as_str_date(value: datetime.date):
+    return value.strftime('%d %B %Y')
+
+
+@register.filter
 def is_register(value):
     return type(value) is forms.UserRegister
 

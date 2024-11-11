@@ -119,15 +119,15 @@ def lk(request: django.http.request.HttpRequest) -> django.http.response.HttpRes
     if page is None:
         raise Exception()
 
-    connects = Connect.objects.filter(user_id=request.user.id)
+    connects: list[Connect] = Connect.objects.filter(user_id=request.user.id)
 
     query = {}
 
     for i in range(len(connects)):
-        if connects[i].student_id.human_id.id not in list(query.keys()):
-            query[connects[i].student_id.human_id.id] = []
+        if connects[i].student.human_id not in list(query.keys()):
+            query[connects[i].student.human_id] = []
 
-        query[connects[i].student_id.human_id.id].append(connects[i].student_id)
+        query[connects[i].student.human_id].append(connects[i].student)
 
     return django.shortcuts.render(request, page.template, {"title": page.title, "query": query})
 

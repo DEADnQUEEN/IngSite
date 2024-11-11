@@ -59,7 +59,9 @@ FILTER_OBJECTS: Final[dict[str: tuple[django.db.models.Model, list[str]]]] = {
         ]
     )
     for model in [
-        models.User, models.Student, models.Visits, models.Courses, models.Finance, models.Human, models.Connect
+        models.User, models.Student, models.Visits,
+        models.Courses, models.Finance, models.Human,
+        models.Connect, models.Coins, models.States
     ]
 }
 
