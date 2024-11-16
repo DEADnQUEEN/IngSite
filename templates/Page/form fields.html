@@ -30,31 +30,18 @@
             {% for message in messages %}
                <a class="error-message">{{ message }}</a>
             {% endfor %}
-            {% if form|is_register %}
-                <div class="policy">
-                    <div class="text-font">
-                        <a>Нажимая «Создать», вы принимаете</a>
-                        <a href="https://inginirium.pro/policy">Условия пользовательского соглашения</a>
-                    </div>
-                    <label class="form-sender-label">
-                        <button name="sender"
-                                class="button-style"
-                                id="form-sender"
-                                type="submit">
-                            Создать
-                        </button>
-                    </label>
+            <div class="policy">
+                <div class="text-font">
+                    <a>Нажимая «Войти», вы принимаете</a>
+                    <a href="https://inginirium.pro/policy">Условия пользовательского соглашения</a>
                 </div>
-            {% else %}
-                <label class="form-sender-label">
-                    <button name="sender"
-                            class="button-style"
-                            id="form-sender"
-                            type="submit">
-                        Войти
-                    </button>
-                </label>
-            {% endif %}
+                <button name="sender"
+                        class="button-style"
+                        id="form-sender"
+                        type="submit">
+                    Войти
+                </button>
+            </div>
         </div>
     </form>
 {% endblock %}

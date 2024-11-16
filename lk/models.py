@@ -77,19 +77,13 @@ class UserManager(django.contrib.auth.models.BaseUserManager):
     def create_user(
             self,
             login: str,
-            phone: str,
             name: str,
             surname: str,
             father_name: str,
-            mail: str,
             password=None,
             **extra_fields
     ):
-        if not mail:
-            raise ValueError('The Mail field must be set')
         if not login:
-            raise ValueError('The Login field must be set')
-        if not phone:
             raise ValueError('The Phone field must be set')
 
         human = Human.objects.filter(
@@ -106,31 +100,26 @@ class UserManager(django.contrib.auth.models.BaseUserManager):
             )
             human.save()
 
-        mail = self.normalize_email(mail)
-        user = self.model(phone=phone, mail=mail, login=login, human=human, human_id=human.id, **extra_fields)
+        user = self.model(login=login, human=human, human_id=human.id, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
 
         return user
 
     def create_superuser(self, login, password=None, **extra_fields):
-        phone = input('phone: ')
         name = input('name: ')
         surname = input('surname: ')
         father_name = input('father_name: ')
-        mail = input('mail: ')
         extra_fields.setdefault('is_superuser', True)
 
-        return self.create_user(login, phone, name, surname, father_name, mail, password, **extra_fields)
+        return self.create_user(login, name, surname, father_name, password, **extra_fields)
 
 
 class User(django.contrib.auth.models.AbstractBaseUser, django.contrib.auth.models.PermissionsMixin):
     id = models.AutoField(db_column='ID', primary_key=True)
     human = models.ForeignKey(Human, models.DO_NOTHING)
-    login = models.TextField(db_column='Login', unique=True)
     password = models.TextField(db_column='Password')
-    phone = models.TextField(db_column='Phone', unique=True)
-    mail = models.TextField(db_column='Mail', unique=True)
+    login = models.TextField(db_column='Login', unique=True, verbose_name="Phone")
     last_login = models.TextField(db_column='Last Login', default=None, null=True, blank=True)
     is_superuser = models.IntegerField(db_column='IsRoot', default=0)
 
