@@ -12,18 +12,6 @@ def model_to_dict(model: models.Model):
     }
 
 
-def get_states_by_id(state_id: int) -> list:
-    text_id = str(state_id)
-
-    states = []
-    for j in range(len(text_id)):
-        v = States.objects.filter(id=int(text_id[len(text_id) - 1 - j]) * (10 ** j)).first()
-        if v is not None:
-            states.append(v)
-
-    return states
-
-
 class States(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
     name = models.CharField(db_column='Name', null=False, max_length=20, verbose_name="Название статуса")
@@ -32,7 +20,7 @@ class States(models.Model):
     class Meta:
         managed = True
         db_table = 'States'
-        verbose_name = "Статусы"
+        verbose_name = "Статус"
 
     def __str__(self):
         return f"{self.id}: {self.name}"
@@ -40,10 +28,18 @@ class States(models.Model):
 
 class Courses(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
-    name = models.CharField(db_column='Name', max_length=20, verbose_name="Название курса")
-    date = models.DateField(db_column='Date', verbose_name="Дата")
-    time = models.TimeField(db_column='Time', verbose_name="Время")
-    lessons = models.IntegerField(db_column='Lessons', verbose_name="Количество занятий")
+    name = models.CharField(
+        db_column='Name', max_length=20, verbose_name="Название курса", blank=False, null=False
+    )
+    date = models.DateField(
+        db_column='Date', verbose_name="Дата", blank=False, null=False
+    )
+    time = models.TimeField(
+        db_column='Time', verbose_name="Время", blank=False, null=False
+    )
+    lessons = models.IntegerField(
+        db_column='Lessons', verbose_name="Количество занятий", blank=False, null=False
+    )
 
     class Meta:
         managed = True
@@ -51,19 +47,27 @@ class Courses(models.Model):
         verbose_name = "Курс"
 
     def __str__(self):
-        return f"{self.Meta.verbose_name}: {self.name}"
+        return f"{self._meta.verbose_name}: {self.name}"
 
 
 class Human(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)
-    name = models.CharField(db_column='Name', null=False, max_length=20, verbose_name="Имя")
-    surname = models.CharField(db_column='Surname', null=False, max_length=20, verbose_name="Фамилия")
-    father_name = models.CharField(db_column='Father name', null=True, blank=True, max_length=20, verbose_name="Отчество")
+    id = models.AutoField(
+        db_column='ID', primary_key=True
+    )
+    name = models.CharField(
+        db_column='Name', null=False, max_length=20, verbose_name="Имя", blank=False
+    )
+    surname = models.CharField(
+        db_column='Surname', null=False, max_length=20, verbose_name="Фамилия", blank=False
+    )
+    father_name = models.CharField(
+        db_column='Father name', null=True, blank=True, max_length=20, verbose_name="Отчество"
+    )
 
     class Meta:
         managed = True
         db_table = 'Human'
-        verbose_name = "Имя Человека"
+        verbose_name = "Имя"
 
     @property
     def full_name(self):
@@ -119,12 +123,24 @@ class UserManager(django.contrib.auth.models.BaseUserManager):
 
 
 class User(django.contrib.auth.models.AbstractBaseUser, django.contrib.auth.models.PermissionsMixin):
-    id = models.AutoField(db_column='ID', primary_key=True, null=False, verbose_name="ID")
-    human = models.ForeignKey(Human, models.DO_NOTHING, null=False, verbose_name="Имя человека")
-    login = models.CharField(db_column='Login', unique=True, verbose_name="Телефон", max_length=11, null=False)
-    password = models.CharField(db_column='Password', max_length=20, null=False, verbose_name="Пароль")
-    last_login = models.TextField(db_column='Last Login', default=None, null=True, blank=True)
-    is_superuser = models.IntegerField(db_column='IsRoot', default=0, verbose_name="Суперпользователь")
+    id = models.AutoField(
+        db_column='ID', primary_key=True, null=False, verbose_name="ID"
+    )
+    human = models.ForeignKey(
+        Human, models.DO_NOTHING, null=False, verbose_name="Имя человека", blank=False
+    )
+    login = models.CharField(
+        db_column='Login', unique=True, verbose_name="Телефон", max_length=11, null=False, blank=False
+    )
+    password = models.CharField(
+        db_column='Password', max_length=20, null=False, verbose_name="Пароль", blank=False
+    )
+    last_login = models.TextField(
+        db_column='Last Login', default=None, null=True, blank=True
+    )
+    is_superuser = models.IntegerField(
+        db_column='IsRoot', default=0, verbose_name="Суперпользователь", blank=False, null=False
+    )
 
     objects = UserManager()
 
@@ -145,9 +161,28 @@ class User(django.contrib.auth.models.AbstractBaseUser, django.contrib.auth.mode
 
 class Student(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
-    human = models.ForeignKey(Human, models.DO_NOTHING, verbose_name="Человек")
-    course = models.ForeignKey(Courses, models.DO_NOTHING, verbose_name="Курс")
-    state = models.ForeignKey(States, models.DO_NOTHING, verbose_name="Статус")
+    human = models.ForeignKey(
+        Human,
+        models.DO_NOTHING,
+        verbose_name="Имя",
+        blank=False,
+        null=False
+    )
+    course = models.ForeignKey(
+        Courses, models.DO_NOTHING,
+        verbose_name="Курс",
+        default=Courses.objects.get(id=1),
+        blank=False,
+        null=False
+    )
+    state = models.ForeignKey(
+        States,
+        models.DO_NOTHING,
+        verbose_name="Статус",
+        default=States.objects.get(id=1),
+        blank=False,
+        null=False
+    )
 
     @property
     def visits(self):
@@ -170,7 +205,7 @@ class Student(models.Model):
         verbose_name = "Студент"
 
     def __str__(self):
-        return f"{self.Meta.verbose_name} {self.id}: {self.human}"
+        return f"{self._meta.verbose_name} {self.id}: {self.human}"
 
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
@@ -205,30 +240,79 @@ class Finance(models.Model):
 
 
 class Coins(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)
-    student = models.ForeignKey(Student, on_delete=models.DO_NOTHING, db_column='Student_ID', verbose_name="Студент")
-    amount = models.DecimalField(db_column='Balance', null=False, max_digits=10, decimal_places=2, verbose_name="Количество")
-    data = models.DateField(db_column='Date', null=False, verbose_name="Дата")
+    id = models.AutoField(
+        db_column='ID',
+        primary_key=True,
+        blank=False,
+        null=False
+    )
+    student = models.ForeignKey(
+        Student,
+        on_delete=models.DO_NOTHING,
+        db_column='Student_ID',
+        verbose_name="Студент",
+        blank=False,
+        null=False
+    )
+    amount = models.DecimalField(
+        db_column='Balance',
+        null=False,
+        max_digits=10,
+        decimal_places=2,
+        verbose_name="Количество",
+        blank=False,
+        default=0,
+    )
+    data = models.DateField(
+        db_column='Date',
+        null=False,
+        verbose_name="Дата",
+        blank=False,
+    )
 
     class Meta:
         managed = True
         db_table = 'Coins'
-        verbose_name = 'Монеты'
+        verbose_name = 'Совокоины'
 
     def __str__(self):
         return str(self.student)
 
 
 class Visits(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)
-    student = models.ForeignKey(Student, on_delete=models.DO_NOTHING, db_column='Student_ID', verbose_name='Студент')
-    date = models.DateField(db_column='Date', null=False, verbose_name="Дата")
-    time = models.TimeField(db_column='Time', null=False, verbose_name="Время")
-    state_id = models.IntegerField(db_column='State_ID', null=False, verbose_name="Дата")
-
-    @property
-    def states(self) -> list[States]:
-        return get_states_by_id(self.state_id)
+    id = models.AutoField(
+        db_column='ID',
+        primary_key=True,
+        blank=False,
+        null=False
+    )
+    student = models.ForeignKey(
+        Student,
+        on_delete=models.DO_NOTHING,
+        db_column='Student_ID',
+        verbose_name='Студент',
+        blank=False,
+        null=False
+    )
+    date = models.DateField(
+        db_column='Date',
+        null=False,
+        verbose_name="Дата",
+        blank=False,
+    )
+    time = models.TimeField(
+        db_column='Time',
+        null=False,
+        verbose_name="Время",
+        blank=False,
+    )
+    state_id = models.IntegerField(
+        db_column='State_ID',
+        null=False,
+        verbose_name="Дата",
+        default=States.objects.get(id=1),
+        blank=False,
+    )
 
     class Meta:
         managed = True
@@ -240,14 +324,31 @@ class Visits(models.Model):
 
 
 class Connect(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)
-    user = models.ForeignKey(User, models.DO_NOTHING, verbose_name="Пользователь")
-    student = models.ForeignKey(Student, models.DO_NOTHING, verbose_name="Студент")
+    id = models.AutoField(
+        db_column='ID',
+        primary_key=True,
+        blank=False,
+        null=False
+    )
+    user = models.ForeignKey(
+        User,
+        models.DO_NOTHING,
+        verbose_name="Пользователь",
+        blank=False,
+        null=False
+    )
+    student = models.ForeignKey(
+        Student,
+        models.DO_NOTHING,
+        verbose_name="Студент",
+        blank=False,
+        null=False
+    )
 
     class Meta:
         managed = True
         db_table = 'Connect'
-        verbose_name = "Связи"
+        verbose_name = "Соединение"
 
     def __str__(self):
         return f"{self.user} -> {self.student}"

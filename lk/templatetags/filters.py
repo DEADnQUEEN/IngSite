@@ -69,7 +69,7 @@ def count_coins(value: list[models.Coins]):
     while i < len(value):
         s *= 1.12
         while value[i].data.month == last_date.month and i < len(value):
-            s += value[i].coins
+            s += value[i].amount
             i += 1
     return round(s, 2)
 
