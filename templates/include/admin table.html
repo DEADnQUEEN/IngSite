@@ -1,13 +1,13 @@
 {% load db %}
 {% load filters %}
 
-<div class="admin-fields"  style="--c:{{ fields|length|add:2 }}">
-    <a>N</a>
+<div class="admin-fields" style="--c:{{ fields|length|add:2 }}">
+    <a>№</a>
     {% with 'header-labels' as class %}
         {% for field, option in fields.items %}
             {% include option.template with options=option.options id=option.options.name class=class %}
         {% endfor %}
-        <button class="table-button" id="save-table" onclick="add('{{ class }}')">add model</button>
+        <button class="table-button" id="save-table" onclick="save_add('{{ class }}', 'add')">add model</button>
     {% endwith %}
 
     {% for model in models %}
@@ -16,7 +16,7 @@
             {% for field, option in fields.items %}
                 {% include option.template with id=option.options.name|concat:'-'|concat:forloop.parentloop.counter value=model|dict_key:field options=option.options class=class %}
             {% endfor %}
-            <button class="table-button" id="save-row-{{ forloop.counter0 }}" onclick="save('{{ class }}')">save</button>
+            <button class="table-button" id="save-row-{{ forloop.counter0 }}" onclick="save_add('{{ class }}', 'save')">save</button>
         {% endwith %}
     {% endfor %}
 </div>

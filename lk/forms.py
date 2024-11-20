@@ -1,9 +1,5 @@
 from __future__ import annotations
-import hashlib
 from django import forms
-import django.contrib.auth.forms
-from . import models
-import django.contrib
 
 
 class UserLogin(forms.Form):

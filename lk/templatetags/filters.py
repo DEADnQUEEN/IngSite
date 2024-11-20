@@ -1,10 +1,8 @@
-import calendar
 import datetime
 import decimal
 from django import template
 from typing import Final
 from .. import models
-from .. import forms
 
 register = template.Library()
 SEP: Final = "_sep_"
@@ -96,8 +94,8 @@ def as_str_date(value: datetime.date):
 
 
 @register.filter
-def is_register(value):
-    return type(value) is forms.UserRegister
+def get_verbose_name(model):
+    return model._meta.verbose_name
 
 
 @register.filter

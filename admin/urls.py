@@ -3,10 +3,8 @@ from . import views
 
 urlpatterns = [
     path("", views.main),
-    path("save", views.save),
-    path("add", views.add)
+    path("save/<str:model_name>", views.save),
+    path("add/<str:model_name>", views.add),
+    path("<str:model_name>", views.filter_page),
+    path("show/<str:model_name>", views.show)
 ]
-
-model_list = [*views.FILTER_OBJECTS.keys()]
-for i in range(len(model_list)):
-    urlpatterns.append(path(f"{model_list[i]}", views.filter_page))

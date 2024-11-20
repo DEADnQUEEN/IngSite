@@ -1,6 +1,7 @@
 {% load db %}
+{% load filters %}
 
 {% for model in 0|get_model_list %}
-    <a class="button-style admin-button" href="/admin/{{ model }}">{{ model }}</a>
+    <a class="button-style admin-button" href="/admin/add/{{ model.name }}">Добавить {{ model|get_verbose_name }}</a>
 {% endfor %}
 

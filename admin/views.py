@@ -6,10 +6,10 @@ import django.http.request
 import django.http.response
 from lk import models
 from .models import Page
-import os
 from django.db.models import Field
 from django.db import connections
 from django.forms.models import model_to_dict
+from .forms import model_forms
 
 
 def common_options(field: django.db.models.Field) -> dict:
@@ -92,35 +92,46 @@ def main(request: django.http.request.HttpRequest) -> django.http.response.HttpR
     )
 
 
-def add(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
-    if request.method != "POST" or not request.user.is_superuser:
+def add(request: django.http.request.HttpRequest, model_name) -> django.http.response.HttpResponse:
+    if not request.user.is_superuser:
         return django.shortcuts.redirect('../lk/')
 
-    json_data: dict = json.loads(request.body)
+    form = model_forms[model_name]()
 
-    model: models.models.Model = FILTER_OBJECTS[json_data['table']][0]
+    if request.method != "POST":
+        return django.shortcuts.render(
+            request,
+            "Page/admin forms.html",
+            {
+                'title': model_name,
+                "form": form
+            }
+        )
 
-    data = {}
+    form = model_forms[model_name](request.POST)
 
-    for k in json_data['model-content'].keys():
-        field: models.models.Field = model._meta.get_field(k)
-        if isinstance(field, models.models.ForeignKey):
-            f: models.models.ForeignKey = field
-            data[k] = FILTER_OBJECTS[
-                f.remote_field.model.__name__
-            ][0].objects.filter(id=json_data['model-content'][k]).first()
-        else:
-            data[k] = json_data['model-content'][k]
+    if not form.is_valid():
+        return django.shortcuts.render(
+            request,
+            "Page/admin forms.html",
+            {
+                'title': model_name,
+                "form": form
+            }
+        )
 
-    model(**data).save()
+    model_obj = form.save(True)
 
     return django.http.response.HttpResponse("")
 
 
-def save(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
+def save(request: django.http.request.HttpRequest, model_name) -> django.http.response.HttpResponse:
     if request.method != "POST" or not request.user.is_superuser:
         return django.shortcuts.redirect('../lk/')
     json_data: dict = json.loads(request.body)
+
+    if model_name not in FILTER_OBJECTS.keys():
+        return django.shortcuts.redirect('/admin/')
 
     model_object: models.models.Model = FILTER_OBJECTS[
         json_data['table']
@@ -132,7 +143,7 @@ def save(request: django.http.request.HttpRequest) -> django.http.response.HttpR
         if isinstance(field, models.models.ForeignKey):
             f: models.models.ForeignKey = field
             attr = FILTER_OBJECTS[
-                f.remote_field.model.__name__
+                f.remote_field.model_obj.__name__
             ][0].objects.filter(id=json_data['model-content'][k]).first()
         else:
             attr = json_data['model-content'][k]
@@ -143,12 +154,15 @@ def save(request: django.http.request.HttpRequest) -> django.http.response.HttpR
     return django.http.response.HttpResponse("")
 
 
-def filter_page(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
-    model: django.db.models.Model = FILTER_OBJECTS[os.path.split(request.path)[-1]][0]
+def filter_page(request: django.http.request.HttpRequest, model_name) -> django.http.response.HttpResponse:
+    if model_name not in FILTER_OBJECTS.keys():
+        return django.shortcuts.redirect('/admin/')
+
+    model: django.db.models.Model = FILTER_OBJECTS[model_name][0]
 
     field_names = FILTER_OBJECTS[model.__name__][1]
-
     fields = {}
+
     for i in range(len(field_names)):
         field: Field = model._meta.get_field(field_names[i])
         tp = type(field)
@@ -169,3 +183,7 @@ def filter_page(request: django.http.request.HttpRequest) -> django.http.respons
         'Page/admin.html',
         render_object
     )
+
+
+def show(request: django.http.request.HttpRequest, model_name) -> django.http.response.HttpResponse:
+    return django.http.HttpResponse(model_forms[model_name]())

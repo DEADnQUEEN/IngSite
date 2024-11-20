@@ -29,7 +29,7 @@ def dict_key(dictionary: dict, key):
 
 @register.filter
 def get_model_list(_):
-    return [key for key in FILTER_OBJECTS.keys()]
+    return [FILTER_OBJECTS[key][0] for key in FILTER_OBJECTS.keys()]
 
 
 @register.filter

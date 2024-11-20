@@ -1,0 +1,23 @@
+{% load filters %}
+
+{% with form as form %}
+    <form class="block form-field" method="post" action="/admin/add/{{ model }}">
+        {% csrf_token %}
+        {% for input in form|as_list %}
+            <div class="">
+                <a class="text-font">{{ input.label }}</a>
+                {{ input }}
+            {% if input.errors|length != 0 %}
+                <div class="">
+                {% for error in input.errors %}
+                    <a>{{ error }}</a>
+                {% endfor %}
+                </div>
+            {% endif %}
+            </div>
+        {% endfor %}
+        {% for message in messages %}
+           <a class="">{{ message }}</a>
+        {% endfor %}
+    </form>
+{% endwith %}
