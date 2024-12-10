@@ -309,7 +309,7 @@ class Visits(models.Model):
     state_id = models.IntegerField(
         db_column='State_ID',
         null=False,
-        verbose_name="Дата",
+        verbose_name="Статус",
         default=States.objects.get(id=1),
         blank=False,
     )

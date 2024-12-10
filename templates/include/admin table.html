@@ -5,9 +5,9 @@
     <a>№</a>
     {% with 'header-labels' as class %}
         {% for field, option in fields.items %}
-            {% include option.template with options=option.options id=option.options.name class=class %}
+            {% include option.template with options=option.options id=option.options.name class=class value='' %}
         {% endfor %}
-        <button class="table-button" id="save-table" onclick="save_add('{{ class }}', 'add')">add model</button>
+        <a></a>
     {% endwith %}
 
     {% for model in models %}

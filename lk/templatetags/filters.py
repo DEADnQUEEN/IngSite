@@ -1,5 +1,7 @@
 import datetime
 import decimal
+
+import django.db.models
 from django import template
 from typing import Final
 from .. import models
@@ -94,8 +96,13 @@ def as_str_date(value: datetime.date):
 
 
 @register.filter
-def get_verbose_name(model):
+def get_verbose_name(model: django.db.models.Model):
     return model._meta.verbose_name
+
+
+@register.filter
+def get_model_name(model: django.db.models.Model):
+    return model._meta.model_name
 
 
 @register.filter

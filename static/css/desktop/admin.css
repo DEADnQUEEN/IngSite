@@ -20,16 +20,6 @@
     font-size: 14px;
 }
 
-.top-panel {
-    align-self: center;
-    width: fit-content;
-    height: fit-content;
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
 .admin-field-header{
     display: flex;
     flex-direction: column;

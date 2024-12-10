@@ -8,7 +8,8 @@
     <link rel="stylesheet" type="text/css" href="{% static '/css/desktop/admin.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static '/css/desktop/valid.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static '/css/desktop/admin fields.css' %}"/>
-
+    <link rel="stylesheet" type="text/css" href="{% static '/css/desktop/admin top panel.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/desktop/combobox.css' %}"/>
 {% endblock %}
 
 {% block extension %}
@@ -17,7 +18,7 @@
             {% include 'include/admin panel.html' %}
         </div>
         <div class="model-form">
-            {% include 'Base/form-fields.html' with form=form model=title %}
+            {% include 'Base/add model.html' with fields=fields %}
         </div>
     </div>
 {% endblock %}

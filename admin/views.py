@@ -29,7 +29,7 @@ def input_options(field: django.db.models.Field) -> dict[str, any]:
 
 def id_options(field: django.db.models.AutoField) -> dict[str, any]:
     opt = {
-        "template": "Base/cmb_id.html",
+        "template": "Base/combobox.html",
         "options": common_options(field)
     }
     opt["options"]["objects"] = {
@@ -74,6 +74,21 @@ TODO: dict[any, callable] = {
 }
 
 
+def get_model_fields(model: type(django.db.models.Model)):
+    field_names = FILTER_OBJECTS[model._meta.model_name.capitalize()][1]
+    fields = {}
+
+    for i in range(len(field_names)):
+        field: Field = model._meta.get_field(field_names[i])
+        tp = type(field)
+        func = input_options
+        if tp in TODO.keys():
+            func = TODO[tp]
+        fields[field.name] = func(field)
+
+    return fields
+
+
 def main(request: django.http.request.HttpRequest) -> django.http.response.HttpResponse:
     if not request.user.is_superuser:
         return django.shortcuts.redirect('/lk')
@@ -92,19 +107,23 @@ def main(request: django.http.request.HttpRequest) -> django.http.response.HttpR
     )
 
 
-def add(request: django.http.request.HttpRequest, model_name) -> django.http.response.HttpResponse:
+def add(request: django.http.request.HttpRequest, model_name: str) -> django.http.response.HttpResponse:
     if not request.user.is_superuser:
         return django.shortcuts.redirect('../lk/')
 
-    form = model_forms[model_name]()
+    model_name = model_name.capitalize()
+    if model_name not in FILTER_OBJECTS.keys():
+        return django.shortcuts.redirect('/admin/')
 
-    if request.method != "POST":
+    form = model_forms[model_name]()
+    model: models.models.Model = FILTER_OBJECTS[model_name][0]
+    if request.method == "GET":
         return django.shortcuts.render(
             request,
-            "Page/admin forms.html",
+            "Page/add_model.html",
             {
-                'title': model_name,
-                "form": form
+                'title': model._meta.verbose_name,
+                "fields": get_model_fields(model),
             }
         )
 
@@ -128,25 +147,28 @@ def add(request: django.http.request.HttpRequest, model_name) -> django.http.res
 def save(request: django.http.request.HttpRequest, model_name) -> django.http.response.HttpResponse:
     if request.method != "POST" or not request.user.is_superuser:
         return django.shortcuts.redirect('../lk/')
+
+    if model_name not in FILTER_OBJECTS.keys():
+        return django.shortcuts.redirect('/admin/')
+
+    model_name = model_name.capitalize()
     json_data: dict = json.loads(request.body)
 
     if model_name not in FILTER_OBJECTS.keys():
         return django.shortcuts.redirect('/admin/')
 
-    model_object: models.models.Model = FILTER_OBJECTS[
-        json_data['table']
-    ][0].objects.filter(id=json_data['model-content']['id'])[0]
+    model_object: models.models.Model = FILTER_OBJECTS[model_name][0].objects.filter(id=json_data['id'])[0]
 
-    for k in json_data['model-content'].keys():
+    for k in json_data.keys():
         field: models.models.Field = model_object._meta.get_field(k)
 
         if isinstance(field, models.models.ForeignKey):
             f: models.models.ForeignKey = field
             attr = FILTER_OBJECTS[
                 f.remote_field.model_obj.__name__
-            ][0].objects.filter(id=json_data['model-content'][k]).first()
+            ][0].objects.filter(id=json_data[k]).first()
         else:
-            attr = json_data['model-content'][k]
+            attr = json_data[k]
         setattr(model_object, k, attr)
 
     model_object.save()
@@ -154,27 +176,20 @@ def save(request: django.http.request.HttpRequest, model_name) -> django.http.re
     return django.http.response.HttpResponse("")
 
 
-def filter_page(request: django.http.request.HttpRequest, model_name) -> django.http.response.HttpResponse:
+def filter_page(request: django.http.request.HttpRequest, model_name: str) -> django.http.response.HttpResponse:
+    model_name = model_name.capitalize()
+
     if model_name not in FILTER_OBJECTS.keys():
         return django.shortcuts.redirect('/admin/')
 
     model: django.db.models.Model = FILTER_OBJECTS[model_name][0]
 
-    field_names = FILTER_OBJECTS[model.__name__][1]
-    fields = {}
-
-    for i in range(len(field_names)):
-        field: Field = model._meta.get_field(field_names[i])
-        tp = type(field)
-        func = input_options
-        if tp in TODO.keys():
-            func = TODO[tp]
-        fields[field.name] = func(field)
+    field_names = FILTER_OBJECTS[model_name][1]
 
     render_object: dict[str, any] = {
         'title': model.__name__,
         "model": model,
-        "fields": fields,
+        "fields": get_model_fields(model),
         "values": (model_to_dict(m, fields=field_names) for m in model.objects.all())
     }
 

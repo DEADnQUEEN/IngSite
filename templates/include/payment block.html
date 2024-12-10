@@ -1,7 +1,7 @@
 <div class="payment">
     {% if payment is not None %}
-        <a class="payment-value {% if payment.value > 0 %}plus{% else %}minus{% endif %} ">{{ payment.value }}₽</a>
-        <a class="payment-type">{% if payment.value > 0 %}Пополнение{% else %}Списание{% endif %}</a>
+        <a class="payment-value {% if payment.amount > 0 %}plus{% else %}minus{% endif %} ">{{ payment.amount }}₽</a>
+        <a class="payment-type">{% if payment.amount > 0 %}Пополнение{% else %}Списание{% endif %}</a>
     {% else %}
         <a class="payment-empty">Пока что оплат не было или мы их ещё не внесли</a>
     {% endif %}
