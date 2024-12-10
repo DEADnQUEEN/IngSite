@@ -1,0 +1,28 @@
+.top-panel {
+    align-self: center;
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.top-panel > div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.top-panel > div > a {
+    margin-left: 10px;
+    width: fit-content;
+}
+
+.model-buttons {
+    display: flex;
+    flex-directiona: row;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 10px;
+}

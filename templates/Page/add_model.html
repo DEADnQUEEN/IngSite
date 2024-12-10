@@ -1,0 +1,29 @@
+{% extends 'Base/main index.html' %}
+{% load static %}
+{% load db %}
+
+{% block head_loads %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/any/header-content.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/any/scroll.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/desktop/admin.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/desktop/valid.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/desktop/admin fields.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/desktop/admin top panel.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/desktop/admin model form.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/desktop/combobox.css' %}"/>
+{% endblock %}
+
+{% block extension %}
+    <div class="admin-content">
+        <div class="top-panel">
+            {% include 'include/admin panel.html' %}
+        </div>
+        <div class="model-form block">
+            <a class="form-title">{{ title }}</a>
+            {% csrf_token %}
+            {% include 'Base/add model.html' with form=form model=title class="model-field" %}
+            <button>Добавить</button>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,8 @@
+{% for field, option in fields.items %}
+    {% if not forloop.first %}
+        <div class="model-field">
+            <a>{{ option.options.name }}:</a>
+            {% include option.template with options=option.options id=field class=class %}
+        </div>
+    {% endif %}
+{% endfor %}

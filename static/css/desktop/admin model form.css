@@ -1,0 +1,56 @@
+.model-form {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    border-radius: 20px;
+    gap: 20px;
+}
+
+.model-field {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+}
+
+div.model-field {
+    gap: 10px;
+}
+
+div.model-field > a {
+    font-size: 24px;
+    text-indent: 5px;
+}
+
+label.model-field {
+    flex-direction: row;
+    border: var(--input-border-size) solid var(--primary-color);
+    border-radius: 10px;
+
+}
+
+label.model-field > * {
+    background-color: transparent;
+    font-size: 20px;
+    color: var(--primary-color);
+    outline: none;
+    border: none;
+    height: 30px;
+    margin: 5px 10px;
+    width: 100%;
+}
+
+select::-ms-expand {
+    display: none;
+}
+
+select {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+option{
+    padding: 20px;
+}
+
+
