@@ -1,10 +1,10 @@
 <div class="{{ class }} combobox" id="{{ id }}">
     {% if not forloop.parentloop %}
-        <input type="radio" id="{{ id }}-0" name="{{ options.name }}-{{ forloop.parentloop.counter }}" value="" checked/>
+        <input type="radio" id="{{ id }}-0" name="{{ name }}" value="" checked/>
         <label for="{{ id }}-0">{{ options.name }}</label>
     {% endif %}
     {% for key, item_value in options.objects.items %}
-        <input type="radio" id="{{ id }}-{{ forloop.counter }}" name="{{ options.name }}-{{ forloop.parentloop.counter }}" value="{{ key }}" {% if key == value %}checked{% endif %}/>
+        <input type="radio" id="{{ id }}-{{ forloop.counter }}" name="{{ name }}" value="{{ key }}" {% if key == value %}checked{% endif %}/>
         <label for="{{ id }}-{{ forloop.counter }}">id:{{ key }} - {{ item_value }}</label>
     {% endfor %}
     <div class="arrow">

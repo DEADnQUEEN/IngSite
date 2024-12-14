@@ -16,7 +16,7 @@
 
     .visit-block a {
         color: var(--background-color-block);
-        transition: ease-in-out var(--transition);
+        transition: var(--transition);
         font-size: 14px;
         font-weight: bold;
         align-self: center;

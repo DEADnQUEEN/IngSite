@@ -9,6 +9,16 @@
     row-gap: 10px;
     column-gap: 20px;
     grid-template-columns: repeat(var(--c), max-content);
+    overflow-x: scroll;
+    padding-bottom: 10px;
+}
+
+.admin-fields::-webkit-scrollbar{
+    height: 5px;
+}
+
+.admin-fields::-webkit-scrollbar-track{
+    box-shadow: none;
 }
 
 .admin-fields > label {
@@ -18,10 +28,14 @@
 .admin-fields > label > * {
     width: 100%;
     display: flex;
-    padding: 0 5px;
-    border-radius: 5px;
+    padding: 10px;
+    border-radius: 10px;
     background-color: var(--background-color-block);
-    border: 2px solid var(--primary-color);
+    border: var(--input-border-size) solid var(--primary-color);
+    height: fit-content;
+    color: var(--primary-color);
+    font-size: 16px;
+    font-weight: bolder;
 }
 
 .admin-fields > label > *:disabled {
@@ -45,14 +59,42 @@
     border: var(--input-border-size) solid var(--primary-color);
     background-color: transparent;
     color: var(--primary-color);
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 5px;
-    padding: 0 10px;
-    transition: ease-in-out var(--transition);
+    font-size: 16px;
+    font-weight: bolder;
+    border-radius: 10px;
+    padding: 10px 20px;
+    height: fit-content;
+    transition: var(--transition);
 }
 
 .table-button:hover{
     background-color: var(--primary-color);
     color: var(--background-color);
+}
+
+label.first-row,
+div.first-row:not(:hover):has(input:first-child:checked),
+label > input:placeholder-shown {
+    border-color: var(--devider);
+}
+
+div.first-row > input:first-child:checked + label,
+label > input::placeholder{
+    color: var(--devider);
+}
+
+div.first-row:not(:hover):has(input:first-child:checked) > .arrow path {
+    fill: var(--devider);
+}
+
+.admin-fields > .id:not(#id) {
+    border-color: transparent;
+}
+
+.admin-fields > .id:not(#id) > input:checked + label {
+    color: var(--devider);
+}
+
+.admin-fields > .id:hover:not(#id) > input:checked + label {
+    color: var(--primary-color);
 }

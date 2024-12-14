@@ -84,7 +84,6 @@ class UserForm(forms.ModelForm):
 
 
 class StudentForm(UserForm):
-
     class Meta:
         model = models.Student
         fields = "__all__"

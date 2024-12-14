@@ -22,7 +22,7 @@
             <a class="form-title">{{ title }}</a>
             {% csrf_token %}
             {% include 'Base/add model.html' with form=form model=title class="model-field" %}
-            <button>Добавить</button>
+            <button id="add-button">Добавить</button>
         </div>
     </div>
 {% endblock %}

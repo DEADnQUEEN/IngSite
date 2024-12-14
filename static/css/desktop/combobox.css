@@ -14,7 +14,7 @@ div.combobox {
     height: fit-content;
 }
 
-div.combobox:not(#id):hover{
+div.combobox:not(.id:not(#id)):hover{
     row-gap: 5px;
 }
 
@@ -42,7 +42,7 @@ div.combobox > label {
     padding-right: 54px;
 }
 
-div.combobox:not(#id):hover > label{
+div.combobox:not(.id:not(#id)):hover > label{
     line-height: 1;
     color: var(--primary-color);
     padding-top: 5px;
@@ -54,12 +54,12 @@ div.combobox > input:checked + label {
     color: var(--primary-color);
 }
 
-div.combobox:not(#id):hover > input:checked + label {
+div.combobox:not(.id:not(#id)):hover > input:checked + label {
     background-color: var(--accept);
     color: var(--background-color-block);
 }
 
-div.combobox:not(#id) > label:hover {
+div.combobox:not(.id:not(#id)) > label:hover {
     background-color: var(--primary-color);
     color: var(--background-color);
 }
@@ -73,7 +73,7 @@ div.combobox > .arrow {
     transition: 0.5s ease-in-out;
 }
 
-div.combobox:not(#id):hover > .arrow {
+div.combobox#id:hover > .arrow {
     top: 11px;
     rotate: 180deg;
 }
@@ -87,6 +87,6 @@ div.combobox:not(#id):hover > input:first-child:checked ~ .arrow path{
     fill: var(--background-color-block);
 }
 
-div.combobox#id > .arrow{
+div.combobox.id:not(#id) > .arrow{
     display: none;
 }

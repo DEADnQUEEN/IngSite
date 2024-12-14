@@ -53,4 +53,24 @@ option{
     padding: 20px;
 }
 
+#add-button {
+    align-self: center;
+    padding: 10px 80px;
+    background-color: var(--background-color-block);
+    color: var(--primary-color);
+    border: var(--input-border-size) solid var(--primary-color);
+    font-weight: bolder;
+    font-size: 18px;
+    border-radius: 10px;
+    transition: var(--transition);
+}
 
+#add-button:hover{
+    background-color: var(--primary-color);
+    color: var(--background-color);
+}
+
+#add-button:active{
+    background-color: var(--accept);
+    color: var(--background-color-block);
+}

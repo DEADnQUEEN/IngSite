@@ -15,6 +15,7 @@ from .forms import model_forms
 def common_options(field: django.db.models.Field) -> dict:
     f_type = field.db_type(connections['default'])
     return {
+        'field_name': field.name,
         "name": field.verbose_name,
         "type": f_type if f_type not in ['integer', 'float'] else "number",
     }
@@ -115,7 +116,6 @@ def add(request: django.http.request.HttpRequest, model_name: str) -> django.htt
     if model_name not in FILTER_OBJECTS.keys():
         return django.shortcuts.redirect('/admin/')
 
-    form = model_forms[model_name]()
     model: models.models.Model = FILTER_OBJECTS[model_name][0]
     if request.method == "GET":
         return django.shortcuts.render(
@@ -187,7 +187,7 @@ def filter_page(request: django.http.request.HttpRequest, model_name: str) -> dj
     field_names = FILTER_OBJECTS[model_name][1]
 
     render_object: dict[str, any] = {
-        'title': model.__name__,
+        'title': model._meta.verbose_name,
         "model": model,
         "fields": get_model_fields(model),
         "values": (model_to_dict(m, fields=field_names) for m in model.objects.all())

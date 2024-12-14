@@ -27,7 +27,7 @@
     width: 24px;
     height: 24px;
     background: transparent;
-    transition: ease-in-out var(--transition);
+    transition: var(--transition);
 }
 
 .scroll-button > svg > path {
