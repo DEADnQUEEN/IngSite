@@ -1,8 +1,7 @@
 {% load db %}
 {% load filters %}
 
-<div class="admin-fields" style="--c:{{ fields|length|add:2 }}">
-    <a>№</a>
+<div class="admin-fields" style="--c:{{ fields|length|add:1 }}">
     {% with 'header-labels first-row ' as class %}
         {% for field, option in fields.items %}
             {% include option.template with options=option.options id=option.options.field_name class=class|concat:option.options.field_name value='' name=option.options.field_name|concat:'-0'  %}
@@ -12,11 +11,10 @@
 
     {% for model in models %}
         {% with 'model-labels-'|concat:forloop.counter0|concat:' ' as class %}
-            <a>{{ forloop.counter }}</a>
             {% for field, option in fields.items %}
                 {% include option.template with id=option.options.field_name|concat:'-'|concat:forloop.parentloop.counter value=model|dict_key:field options=option.options class=class|concat:option.options.field_name name=option.options.field_name|concat:'-'|concat:forloop.parentloop.counter %}
             {% endfor %}
-            <button class="table-button" id="save-row-{{ forloop.counter0 }}" onclick="save_add('{{ class }}', 'save')">Save</button>
+            <button class="table-button" id="save-row-{{ forloop.counter0 }}" onclick=" save_add('{{ class }}', 'save')">Save</button>
         {% endwith %}
     {% endfor %}
 </div>

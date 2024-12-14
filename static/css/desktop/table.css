@@ -5,12 +5,14 @@
 
 .admin-fields {
     display: grid;
-    place-content: center;
+    align-content: center;
     row-gap: 10px;
     column-gap: 20px;
     grid-template-columns: repeat(var(--c), max-content);
     overflow-x: scroll;
-    padding-bottom: 10px;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: var(--inside-shadow);
 }
 
 .admin-fields::-webkit-scrollbar{
