@@ -148,32 +148,24 @@ def save(request: django.http.request.HttpRequest, model_name) -> django.http.re
     if request.method != "POST" or not request.user.is_superuser:
         return django.shortcuts.redirect('../lk/')
 
+    model_name = model_name.capitalize()
     if model_name not in FILTER_OBJECTS.keys():
         return django.shortcuts.redirect('/admin/')
 
-    model_name = model_name.capitalize()
+    if model_name not in FILTER_OBJECTS.keys():
+        return django.shortcuts.redirect('/admin/')
+
     json_data: dict = json.loads(request.body)
 
-    if model_name not in FILTER_OBJECTS.keys():
-        return django.shortcuts.redirect('/admin/')
-
+    j_keys: list = [*json_data.keys()]
     model_object: models.models.Model = FILTER_OBJECTS[model_name][0].objects.filter(id=json_data['id'])[0]
 
-    for k in json_data.keys():
-        field: models.models.Field = model_object._meta.get_field(k)
-
-        if isinstance(field, models.models.ForeignKey):
-            f: models.models.ForeignKey = field
-            attr = FILTER_OBJECTS[
-                f.remote_field.model_obj.__name__
-            ][0].objects.filter(id=json_data[k]).first()
-        else:
-            attr = json_data[k]
-        setattr(model_object, k, attr)
+    for key in range(1, len(j_keys)):
+        setattr(model_object, j_keys[key], json_data[j_keys[key]])
 
     model_object.save()
 
-    return django.http.response.HttpResponse("")
+    return django.http.response.HttpResponse("Saved!")
 
 
 def filter_page(request: django.http.request.HttpRequest, model_name: str) -> django.http.response.HttpResponse:

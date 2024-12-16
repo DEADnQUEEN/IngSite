@@ -310,7 +310,7 @@ class Visits(models.Model):
         db_column='State_ID',
         null=False,
         verbose_name="Статус",
-        default=States.objects.get(id=1),
+        default=1,
         blank=False,
     )
 
