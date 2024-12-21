@@ -58,6 +58,11 @@ def get_name(human: models.Human):
 
 
 @register.filter
+def get_model_name(model: models.models.Model):
+    return model._meta.model_name
+
+
+@register.filter
 def get_tag(query, tag):
     return SEP.join(
         [

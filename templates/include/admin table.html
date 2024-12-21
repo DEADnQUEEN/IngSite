@@ -14,7 +14,7 @@
             {% for field, option in fields.items %}
                 {% include option.template with id=option.options.field_name|concat:'-'|concat:forloop.parentloop.counter value=model|dict_key:field options=option.options class=class|concat:' '|concat:option.options.field_name name=option.options.field_name|concat:'-'|concat:forloop.parentloop.counter %}
             {% endfor %}
-            <button class="table-button" id="save-row-{{ forloop.counter0 }}" onclick="save('{{ class }}', 'save')">Save</button>
+            <button class="table-button" id="{{ class }}">Save</button>
         {% endwith %}
     {% endfor %}
 </div>
